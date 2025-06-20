@@ -9,3 +9,4 @@ if not logger.hasHandlers():
     logger.setLevel(logging.DEBUG)
 
 logging.getLogger("urllib3").setLevel(logging.WARNING)
+logging.getLogger("filelock").setLevel(logging.WARNING)

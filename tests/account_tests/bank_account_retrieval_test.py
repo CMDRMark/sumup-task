@@ -1,7 +1,6 @@
-import random
 from http import HTTPStatus
 
-from api_client.models.bank_account_creation_models import BankAccountInfoResponseModel
+from api_client.models.bank_account_model import BankAccountInfoResponseModel
 from utils.custom_asserts import assert_response_schema
 
 
@@ -13,4 +12,3 @@ def test_retrieve_bank_account_info(bank_account_client, get_registered_and_logg
     assert_response_schema(model=BankAccountInfoResponseModel, response=response, expected_status=HTTPStatus.OK)
     server_info = BankAccountInfoResponseModel.model_validate(response.json()).to_bank_account()
     assert server_info == bank_account_info, f"Difference: {server_info - bank_account_info}"
-

@@ -1,6 +1,6 @@
 import pytest
 
-from api_client.models.bank_account_creation_models import BankAccountCreationInfoModel
+from api_client.models.bank_account_model import BankAccountCreationInfoModel
 from utils.logger import logger
 from api_client.models.user_model import User
 

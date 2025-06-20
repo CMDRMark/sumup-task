@@ -35,13 +35,13 @@ def save_new_user(user: User, env: str):
         if not file_path.exists():
             file_path.parent.mkdir(parents=True, exist_ok=True)
             with open(file_path, "w") as f:
-                json.dump([], f)
+                json.dump({}, f)
 
         with open(file_path, "r+") as f:
             try:
                 users = json.load(f)
             except json.JSONDecodeError:
-                users = []
+                users = {}
             try:
                 users.update(user)
             except TypeError or JSONDecodeError:

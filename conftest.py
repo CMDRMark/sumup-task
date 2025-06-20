@@ -1,4 +1,5 @@
 import pytest
+import os
 
 from api_client.url_mapping import BASE_URLS
 from utils.logger import logger
@@ -18,7 +19,12 @@ def pytest_addoption(parser):
         default=False,
         help="Save registered users to a file for later use"
     )
-
+    parser.addoption(
+        "--hide-secrets",
+        action="store_true",
+        default=False,
+        help="Log sensitive information like passwords and tokens as '***' instead of their actual values"
+    )
 
 @pytest.fixture(scope='session')
 def get_env(request):
@@ -32,14 +38,23 @@ def get_base_url(get_env):
     return BASE_URLS[get_env]
 
 
+@pytest.fixture(scope='session', autouse=True)
+def configure_secrets_logging(request, get_env):
+    hide_secrets = request.config.getoption("--hide-secrets")
+    if hide_secrets or get_env == "PROD":
+        logger.info("Sensitive information will be logged as '***'")
+    else:
+        logger.info("Sensitive information will be logged in full")
+    os.environ["HIDE_SECRETS"] = "1" if hide_secrets else "0"
+
 @pytest.fixture(scope='session')
 def save_registered_users_flag(request):
     yield request.config.getoption("--save-registered-users")
 
 
-
 def pytest_collection_modifyitems(config, items):
     env = config.getoption("--env")
+
     if env == "PROD":
         safe_items = []
         skipped_items = []

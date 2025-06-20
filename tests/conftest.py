@@ -1,8 +1,8 @@
 import pytest
 import random
+import os
 
-from api_client.models.bank_account_creation_models import BankAccountCreationInfoModel
-from api_client.models.bank_account_model import BankAccount
+from api_client.models.bank_account_model import BankAccount, BankAccountCreationInfoModel
 from api_client.models.user_model import User
 from utils.signup_utils import get_random_username, get_random_password
 from utils.user_data_manager import load_users, save_new_user
@@ -11,38 +11,60 @@ from api_client.auth_api_client import AuthAPIClient
 from api_client.bank_account_manager_api_client import BAMAPIClient
 
 
+def _select_random_user(users: dict, must_have_bank_account: bool = False) -> User:
+    """
+    Selects a random user from the given users.
+    Parses nested objects properly: bank_accounts and bank_account_creation_info.
+    Handles missing or empty cases gracefully.
+    """
+    if must_have_bank_account:
+        users = {
+            uid: u for uid, u in users.items()
+            if u.get("bank_accounts") and len(u["bank_accounts"]) > 0
+        }
+
+    if not users:
+        raise ValueError(
+            "No registered users{} found in the environment data.".format(
+                " with bank accounts" if must_have_bank_account else ""
+            )
+        )
+
+    index = random.choice(list(users.keys()))
+    user_data = users[index]
+
+    if user_data.get("bank_accounts"):
+        raw_accounts = user_data["bank_accounts"]
+        if isinstance(raw_accounts, dict) and raw_accounts:
+            user_data["bank_accounts"] = {
+                k: BankAccount(**v) for k, v in raw_accounts.items()
+            }
+
+    if user_data.get("bank_account_creation_info"):
+        raw_info = user_data["bank_account_creation_info"]
+        if raw_info is not None:
+            user_data["bank_account_creation_info"] = BankAccountCreationInfoModel(**raw_info)
+
+    return User(**user_data)
+
+
 @pytest.fixture(scope="function")
 def get_random_existing_registered_user(get_env) -> User:
     users = load_users(env=get_env)
-    index = random.choice(list(users.keys()))
-    user = User(**users[index])
-    logger.info(f"Using existing registered user. username: {user.username}, password: {user.password}")
+    user = _select_random_user(users, must_have_bank_account=False)
+
+    logger.info(
+        f"Using existing registered user. "
+        f"username: {user.username}, "
+        f"password: {'***' if os.getenv('HIDE_SECRETS') else user.password}"
+    )
     return user
 
 
 @pytest.fixture(scope="function")
 def get_registered_user_with_bank_account(get_env) -> User:
     users = load_users(env=get_env)
-    users_with_bank_accounts = {
-        user_id: user_data
-        for user_id, user_data in users.items()
-        if user_data.get("bank_accounts") and len(user_data["bank_accounts"]) > 0
-    }
-
-    if not users_with_bank_accounts:
-        raise ValueError("No registered users with bank accounts found in the environment data.")
-
-    index = random.choice(list(users_with_bank_accounts.keys()))
-    user_data = users_with_bank_accounts[index]
-
-    raw_accounts = user_data["bank_accounts"]
-    parsed_accounts = {
-        k: BankAccount(**v) for k, v in raw_accounts.items()
-    }
-    user_data["bank_accounts"] = parsed_accounts
-    user = User(**user_data)
-
-    return user
+    return _select_random_user(users, must_have_bank_account=True)
 
 
 @pytest.fixture(scope="session")
@@ -69,9 +91,9 @@ def make_user():
                 password=password
             )
         if password and username:
-            logger.info(f"Using provided user. 'username: {user.username}, password: {user.password}'")
+            logger.info(f"Using provided user. 'username: {user.username}, password: {user.password if os.getenv('HIDE_SECRETS') else '***'}")
         else:
-            logger.info(f"Generated new user credentials. 'username: {user.username}, password: {user.password}'")
+            logger.info(f"Generated new user credentials. 'username: {user.username}, password: {user.password if os.getenv('HIDE_SECRETS') else '***'}")
         return user
     return _make_user
 

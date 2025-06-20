@@ -3,8 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from api_client.models.bank_account_creation_models import BankAccountCreationInfoModel
-from api_client.models.bank_account_model import BankAccount
+from api_client.models.bank_account_model import BankAccount, BankAccountCreationInfoModel
 
 
 class User(BaseModel):
@@ -16,16 +15,32 @@ class User(BaseModel):
     bank_account_creation_info: BankAccountCreationInfoModel = Field(default_factory=dict)
 
     def to_dict(self):
-        return {"username": self.username,
-                "password": self.password,
-                "id": self.id,
-                "bank_accounts": self.bank_accounts,
-                "bank_account_creation_info": self.bank_account_creation_info
-                }
+        bank_account_creation_info = self.bank_account_creation_info
+        if isinstance(self.bank_account_creation_info, BankAccountCreationInfoModel):
+            bank_account_creation_info = self.bank_account_creation_info.to_dict()
+        bank_accounts = {}
+        for k, v in self.bank_accounts.items():
+            if isinstance(v, BankAccount):
+                bank_accounts[k] = v.to_dict()
+            else:
+                # If not a model instance, assume it's already a dict (for backward compatibility)
+                bank_accounts[k] = v
+        return {
+            "username": self.username,
+            "password": self.password,
+            "token": self.token,
+            "id": self.id,
+            "bank_accounts": bank_accounts,
+            "bank_account_creation_info": bank_account_creation_info
+        }
+
+    def bank_account_creation_info_is_empty(self) -> bool:
+        """Returns True if all fields are None or empty."""
+        return any(self.to_dict().values())
 
     def get_random_bank_account_id(self) -> Optional[int]:
         if self.bank_accounts:
-            return random.choice(list(self.bank_accounts.keys()))
+            return int(random.choice(list(self.bank_accounts.keys())))
         return None
 
     def get_random_bank_account_info(self) -> Optional[BankAccount]:
