@@ -15,13 +15,13 @@ class RegistrationResponse(BaseModel):
     @field_validator('username', mode='after')
     def username_must_be_not_empty(cls, value: str):
         if value.strip() == "":
-            raise ValueError("id must be positive")
+            raise ValueError("username should not be empty")
         return value
 
 
 class LoginResponseModel(BaseModel):
     api_key: str
-    expires_at: str
+    expires_at: datetime
 
     @field_validator("api_key", mode="after")
     def api_key_must_not_be_empty(cls, value: str) -> str:
@@ -33,33 +33,12 @@ class LoginResponseModel(BaseModel):
         return value
 
     @field_validator("expires_at", mode="after")
-    def expires_must_be_future(cls, value: str) -> str:
+    def expires_must_be_future(cls, value: datetime) -> datetime:
         """
         Validate that expires_at is ISO8601, handles 'Z',
         and is strictly in the future.
         """
-        raw = value
-
-        # Remove Z if present
-        if raw.endswith("Z"):
-            raw = raw[:-1]
-
-        # If nanoseconds present, trim to microseconds
-        if "." in raw:
-            date_part, frac_part = raw.split(".")
-            frac_part = frac_part[:6]  # microseconds only
-            raw = f"{date_part}.{frac_part}"
-
-        try:
-            dt = datetime.fromisoformat(raw)
-        except Exception as e:
-            raise ValueError(f"Invalid ISO timestamp: {value}") from e
-
-        # Assume UTC
-        dt = dt.replace(tzinfo=timezone.utc)
-
         now = datetime.now(timezone.utc)
-        if dt <= now:
-            raise ValueError(f"expires_at must be in the future. Got: {dt.isoformat()}")
-
+        if value <= now:
+            raise ValueError(f"expires_at must be in the future. Got: {value.isoformat()}")
         return value
