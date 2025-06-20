@@ -2,7 +2,7 @@ from pydantic import ValidationError
 from requests import Response
 from typing import Type
 
-from api_client.validation_models.response_validation_model import ResponseValidationResult, T
+from api_client.models.response_validation_model import ResponseValidationResult, T
 
 
 def assert_response_schema(

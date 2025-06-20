@@ -57,6 +57,12 @@ def pytest_collection_modifyitems(config, items):
         items[:] = safe_items
 
 
+@pytest.fixture(scope="session", autouse=True)
+def push_updated_users_to_vcs():
+    yield
+    logger.info("Pushing updated users to VCS...")
+
+
 # TODO: Fix this
 # @pytest.fixture(scope="session", autouse=True)
 # def test_stats_collector():

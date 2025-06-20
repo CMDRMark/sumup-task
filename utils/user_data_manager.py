@@ -1,11 +1,18 @@
 import json
+from json import JSONDecodeError
 from pathlib import Path
-from user_resources.user_model import User
+from api_client.models.user_model import User
 from filelock import FileLock
+from utils.logger import logger
 
 
-def load_users(env: str):
-    file_path = Path(__file__).parent.parent / "user_resources" / "registered_users" / f"{env}_ENV_USERS.json"
+def _get_file_path(env: str) -> Path:
+    return Path(__file__).parent.parent / "user_accounts_resources" / "registered_users" / f"{env}_ENV_USERS.json"
+
+
+
+def load_users(env: str) -> dict:
+    file_path = _get_file_path(env)
 
     if not file_path.exists():
         raise ValueError(f"No user JSON found for env '{env}'")
@@ -16,11 +23,11 @@ def load_users(env: str):
         with open(file_path, "r") as f:
             raw_users = json.load(f)
 
-    return [User(**user) for user in raw_users]
+    return raw_users
 
 
 def save_new_user(user: User, env: str):
-    file_path = Path(__file__).parent.parent / "user_resources" / "registered_users" / f"{env}_ENV_USERS.json"
+    file_path = _get_file_path(env)
 
     lock = FileLock(str(file_path) + ".lock")
 
@@ -35,7 +42,15 @@ def save_new_user(user: User, env: str):
                 users = json.load(f)
             except json.JSONDecodeError:
                 users = []
-            users.append(user.save_to_file())
+            try:
+                users.update(user)
+            except TypeError or JSONDecodeError:
+                logger.warn(f"Failed to save user '{user}'")
             f.seek(0)
             json.dump(users, f, indent=4)
             f.truncate()
+
+
+def delete_user(user: User, env: str):
+    ...
+

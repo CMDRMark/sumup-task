@@ -1,10 +1,9 @@
 from http import HTTPStatus
 from dataclasses import dataclass
-from typing import Optional
 
 from requests import Response
 
-from user_resources.user_model import User
+from api_client.models.user_model import User
 from utils.custom_requests import post_request
 
 

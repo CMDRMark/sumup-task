@@ -28,7 +28,7 @@ invalid_signup_data = {
 
 invalid_login_data = {
     "NO Password": {
-        "username": "arman_not_registered3",
+        "username": "arman_not_registered3a",
         "password": "",
     },
     "NO Username": {
