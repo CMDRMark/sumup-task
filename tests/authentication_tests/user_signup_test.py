@@ -3,24 +3,25 @@ from http import HTTPStatus
 
 from api_clients_and_models.models.signup_models import RegistrationResponse
 from user_accounts_resources.invalid_data.invalid_user_auth_data import invalid_signup_data
-from utils.custom_asserts import assert_response_schema
+from utils.custom_asserts import validate_response_schema, validate_incorrect_response
 
 
 def test_correct_signup(make_user, auth_client, save_registered_user):
     user = make_user()
     response = auth_client.register_user_request(user=user)
 
-    result = assert_response_schema(RegistrationResponse, response, expected_status=HTTPStatus.OK)
-    assert result.is_valid(), f"Response schema validation failed: {''.join(result.errors)}"
-    assert result.data.username == user.username, f"Expected username {user.username}, got {result.data.username}"
+    validate_response_schema(model=RegistrationResponse, response=response, expected_status=HTTPStatus.CREATED)
+    assert response.json()["username"] == user.username
+
     save_registered_user(user)
 
 
 @pytest.mark.skip()
-@pytest.mark.parametrize("user_data", invalid_signup_data.values(), ids=invalid_signup_data.keys())
-def test_incorrect_signup(make_user, auth_client, user_data):
-    user = make_user(username=user_data["username"], password=user_data["password"], autogen=False)
+@pytest.mark.parametrize("scenario_params", invalid_signup_data.values(), ids=invalid_signup_data.keys())
+def test_incorrect_signup(make_user, auth_client, scenario_params):
+    user = make_user(username=scenario_params.username, password=scenario_params.password, autogen=False)
     response = auth_client.register_user_request(user=user)
+
     assert response.status_code == HTTPStatus.BAD_REQUEST, f"Response schema validation failed: {''.join(response.text)}"
 
 
@@ -28,6 +29,4 @@ def test_signup_already_registered_user(auth_client, get_random_existing_registe
     user = get_random_existing_registered_user
     response = auth_client.register_user_request(username=user.username, password=user.password)
 
-    assert response.status_code == HTTPStatus.CONFLICT, f"Expected 409 Conflict, got {response.status_code}"
-    assert "Username already exists" in response.json()[
-        'message'], "Expected 'Username already exists' message in response"
+    validate_incorrect_response(response, status=HTTPStatus.CONFLICT, message="Username already exists")

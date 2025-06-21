@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from api_clients_and_models.models.bank_account_model import BankAccountInfoResponseModel
 from api_clients_and_models.models.unauthorized_response_model import UnauthorizedResponseModel
-from utils.custom_asserts import assert_response_schema
+from utils.custom_asserts import validate_response_schema
 
 
 def test_get_bank_account_info(bank_account_client, get_registered_and_logged_in_user_with_bank_account):
@@ -10,8 +10,7 @@ def test_get_bank_account_info(bank_account_client, get_registered_and_logged_in
     bank_account_info = user.get_random_bank_account_info()
     response = bank_account_client.get_bank_account_id(user=user, bank_account_id=str(bank_account_info.id))
 
-    result = assert_response_schema(model=BankAccountInfoResponseModel, response=response, expected_status=HTTPStatus.OK)
-    assert result.is_valid(), f"Response schema validation failed: {''.join(result.errors)}"
+    validate_response_schema(model=BankAccountInfoResponseModel, response=response, expected_status=HTTPStatus.OK)
 
     server_info = BankAccountInfoResponseModel.model_validate(response.json()).to_bank_account()
     assert server_info == bank_account_info, f"Difference: {server_info - bank_account_info}"
@@ -27,8 +26,7 @@ def test_get_bank_account_info_without_auth_token(bank_account_client, get_regis
     bank_account_info = user.get_random_bank_account_info()
 
     response = bank_account_client.get_bank_account_id(user=user, bank_account_id=str(bank_account_info.id))
-    result = assert_response_schema(model=UnauthorizedResponseModel, response=response, expected_status=HTTPStatus.UNAUTHORIZED)
-    assert result.is_valid(), f"Response schema validation failed: {''.join(result.errors)}"
+    validate_response_schema(model=UnauthorizedResponseModel, response=response, expected_status=HTTPStatus.UNAUTHORIZED)
     # Test fails because this endpoint does not require authentication as it should, based on the current API design
 
 
@@ -39,6 +37,5 @@ def test_get_bank_account_info_with_incorrect_auth_token(bank_account_client, ge
     user.token += "_"
 
     response = bank_account_client.get_bank_account_id(user=user, bank_account_id=str(bank_account_id))
-    result = assert_response_schema(model=UnauthorizedResponseModel, response=response, expected_status=HTTPStatus.UNAUTHORIZED)
-    assert result.is_valid(), f"Response schema validation failed: {''.join(result.errors)}"
+    validate_response_schema(model=UnauthorizedResponseModel, response=response, expected_status=HTTPStatus.UNAUTHORIZED)
     # Test fails because this endpoint does not require authentication as it should, based on the current API design

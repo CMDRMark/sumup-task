@@ -5,7 +5,7 @@ from api_clients_and_models.models.bank_account_model import BankAccountInfoResp
 from api_clients_and_models.models.unauthorized_response_model import UnauthorizedResponseModel
 from tests.account_tests.conftest import get_registered_and_logged_in_user_with_bank_account
 from user_accounts_resources.invalid_data.invalid_bank_account_creation_info import invalid_bank_account_creation_info
-from utils.custom_asserts import assert_response_schema, assert_sent_information_equals_to_received_information
+from utils.custom_asserts import validate_response_schema, assert_sent_information_equals_to_received_information
 
 
 def test_create_bank_account_for_new_user(bank_account_client, get_new_registered_and_logged_in_user,
@@ -16,7 +16,9 @@ def test_create_bank_account_for_new_user(bank_account_client, get_new_registere
 
     response = bank_account_client.create_bank_account(user=user)
 
-    assert_response_schema(model=BankAccountInfoResponseModel, response=response, expected_status=HTTPStatus.OK)
+    result = validate_response_schema(model=BankAccountInfoResponseModel, response=response, expected_status=HTTPStatus.OK)
+    assert result.is_valid(), f"Response schema validation failed: {''.join(result.errors)}"
+
     bank_account_info = BankAccountInfoResponseModel.model_validate(response.json()).to_bank_account()
 
     assert_sent_information_equals_to_received_information(user.bank_account_creation_info.to_dict(),
@@ -39,7 +41,9 @@ def test_create_bank_account_for_existing_user(bank_account_client, get_register
 
     response = bank_account_client.create_bank_account(user=user)
 
-    assert_response_schema(model=BankAccountInfoResponseModel, response=response, expected_status=HTTPStatus.OK)
+    result = validate_response_schema(model=BankAccountInfoResponseModel, response=response, expected_status=HTTPStatus.OK)
+    assert result.is_valid(), f"Response schema validation failed: {''.join(result.errors)}"
+
     bank_account_info = BankAccountInfoResponseModel.model_validate(response.json()).to_bank_account()
 
     assert_sent_information_equals_to_received_information(user.bank_account_creation_info.to_dict(),
@@ -79,7 +83,7 @@ def test_create_bank_account_without_auth_token(bank_account_client,
     user = get_registered_user_with_bank_account
     response = bank_account_client.create_bank_account(user=user)
 
-    assert_response_schema(model=UnauthorizedResponseModel, response=response, expected_status=HTTPStatus.UNAUTHORIZED)
+    validate_response_schema(model=UnauthorizedResponseModel, response=response, expected_status=HTTPStatus.UNAUTHORIZED)
 
 
 def test_create_bank_account_with_incorrect_auth_token(bank_account_client,
@@ -89,4 +93,4 @@ def test_create_bank_account_with_incorrect_auth_token(bank_account_client,
 
     response = bank_account_client.create_bank_account(user=user)
 
-    assert_response_schema(model=UnauthorizedResponseModel, response=response, expected_status=HTTPStatus.UNAUTHORIZED)
+    validate_response_schema(model=UnauthorizedResponseModel, response=response, expected_status=HTTPStatus.UNAUTHORIZED)

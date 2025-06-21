@@ -1,51 +1,8 @@
-2025-06-21 12:39:32 [INFO] Running tests in TEST environment (conftest.py:34)
-2025-06-21 12:39:32 [INFO] Sensitive information will be logged in full (conftest.py:49)
-2025-06-21 12:39:32 [DEBUG] Request URL: https://global-bank-qa-challenge-external.fleet.dev.eu-west-1.sumup.net/api/auth/login (custom_requests.py:15)
-2025-06-21 12:39:32 [DEBUG] Request Method: POST (custom_requests.py:16)
-2025-06-21 12:39:32 [DEBUG] Request Headers:
-{
-  "User-Agent": "python-requests/2.32.4",
-  "Accept-Encoding": "gzip, deflate",
-  "Accept": "*/*",
-  "Connection": "keep-alive",
-  "Content-Type": "application/json",
-  "Content-Length": "42"
-} (custom_requests.py:21)
-2025-06-21 12:39:32 [DEBUG] Request Body:
-{
-  "username": "DLVEY",
-  "password": "***"
-} (custom_requests.py:37)
-2025-06-21 12:39:32 [DEBUG] Response Status Code: 200 (custom_requests.py:39)
-2025-06-21 12:39:32 [DEBUG] Response Headers:
-{
-  "Date": "Sat, 21 Jun 2025 19:39:32 GMT",
-  "Content-Type": "application/json",
-  "Transfer-Encoding": "chunked",
-  "Connection": "keep-alive",
-  "x-api-key": "***",
-  "x-content-type-options": "nosniff",
-  "x-xss-protection": "0",
-  "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
-  "pragma": "no-cache",
-  "expires": "0",
-  "strict-transport-security": "max-age=31536000 ; includeSubDomains",
-  "x-frame-options": "DENY",
-  "cf-cache-status": "DYNAMIC",
-  "Set-Cookie": "__cf_bm=3rHyTXYuzZiz9NRgODGTn7MNWv1FkI5h2pfOi4XHCpc-1750534772-1.0.1.1-E_kO2MeoO2euegVfjaFxftqsM4hW0clvyNc_npyDLlvkX1iOAk1XnJHsei6_91IH3wiJvF_O7J01pAtXAIYh.2SZqjTb6N.ikzKvU5sPU1M; path=/; expires=Sat, 21-Jun-25 20:09:32 GMT; domain=.sumup.net; HttpOnly; Secure; SameSite=None",
-  "Server": "cloudflare",
-  "CF-RAY": "9535f8f87c2732ea-EVN",
-  "Content-Encoding": "gzip"
-} (custom_requests.py:44)
-2025-06-21 12:39:32 [DEBUG] Response Body:
-{
-  "api_key": "***",
-  "expires_at": "2025-06-21T19:40:32.949800558Z"
-} (custom_requests.py:54)
-2025-06-21 12:39:32 [INFO] Logged in as existing user: DLVEY (conftest.py:36)
-2025-06-21 12:39:33 [DEBUG] Request URL: https://global-bank-qa-challenge-external.fleet.dev.eu-west-1.sumup.net/api/accounts/34 (custom_requests.py:15)
-2025-06-21 12:39:33 [DEBUG] Request Method: GET (custom_requests.py:16)
-2025-06-21 12:39:33 [DEBUG] Request Headers:
+2025-06-21 12:46:37 [INFO] Running tests in TEST environment (conftest.py:34)
+2025-06-21 12:46:37 [INFO] Sensitive information will be logged in full (conftest.py:49)
+2025-06-21 12:46:37 [DEBUG] Request URL: https://global-bank-qa-challenge-external.fleet.dev.eu-west-1.sumup.net/api/accounts/35 (custom_requests.py:15)
+2025-06-21 12:46:37 [DEBUG] Request Method: GET (custom_requests.py:16)
+2025-06-21 12:46:37 [DEBUG] Request Headers:
 {
   "User-Agent": "python-requests/2.32.4",
   "Accept-Encoding": "gzip, deflate",
@@ -53,12 +10,12 @@
   "Connection": "keep-alive",
   "Content-Type": "application/json"
 } (custom_requests.py:21)
-2025-06-21 12:39:33 [DEBUG] Request Body:
+2025-06-21 12:46:37 [DEBUG] Request Body:
 None (custom_requests.py:37)
-2025-06-21 12:39:33 [DEBUG] Response Status Code: 200 (custom_requests.py:39)
-2025-06-21 12:39:33 [DEBUG] Response Headers:
+2025-06-21 12:46:37 [DEBUG] Response Status Code: 200 (custom_requests.py:39)
+2025-06-21 12:46:37 [DEBUG] Response Headers:
 {
-  "Date": "Sat, 21 Jun 2025 19:39:33 GMT",
+  "Date": "Sat, 21 Jun 2025 19:46:37 GMT",
   "Content-Type": "application/json",
   "Transfer-Encoding": "chunked",
   "Connection": "keep-alive",
@@ -70,22 +27,22 @@ None (custom_requests.py:37)
   "strict-transport-security": "max-age=31536000 ; includeSubDomains",
   "x-frame-options": "DENY",
   "cf-cache-status": "DYNAMIC",
-  "Set-Cookie": "__cf_bm=JdH91lbvBtP.ZaLrc9qlgaowalWO_2W7LEzFXA.uDp4-1750534773-1.0.1.1-6zncqKEXUSPgaEA_GuMGRunjsxujYdlBv6v._yoOihK3PPjGDFbkWc5sBTCFHn2b7ioPxBJVAIQkvLuxscsh3rYYiWLRPEQjTX2EzodzNIo; path=/; expires=Sat, 21-Jun-25 20:09:33 GMT; domain=.sumup.net; HttpOnly; Secure; SameSite=None",
+  "Set-Cookie": "__cf_bm=XIUAvsbsSoLUqIUnLDPCqvWCD.6cMa0PijTq1HVsnaA-1750535197-1.0.1.1-CY0IfVXhsLRdpoZ55w4r0Jvj3pgFHp9ho9HyK8TQKBPencfxdq0WdrgiLYn.pfWT0xMy2gU4dotaz7khAJDvCgfAns.6KGQxpMXvfc7Kdwg; path=/; expires=Sat, 21-Jun-25 20:16:37 GMT; domain=.sumup.net; HttpOnly; Secure; SameSite=None",
   "Server": "cloudflare",
-  "CF-RAY": "9535f8fb7c073332-EVN",
+  "CF-RAY": "9536035789d67d1d-EVN",
   "Content-Encoding": "gzip"
 } (custom_requests.py:44)
-2025-06-21 12:39:33 [DEBUG] Response Body:
+2025-06-21 12:46:37 [DEBUG] Response Body:
 {
-  "id": 34,
+  "id": 35,
   "first_name": "John",
   "last_name": "Doe",
   "date_of_birth": "1990-01-01",
   "initial_deposit": 999.99,
   "full_name": "John Doe",
   "iban_issuance_status": "SUCCESSFUL",
-  "iban": "GB65SUPA04145000000034",
-  "created_at": "2025-06-20T20:48:55.115452",
-  "updated_at": "2025-06-20T20:48:57.559383"
+  "iban": "GB38SUPA04145000000035",
+  "created_at": "2025-06-20T20:54:24.114097",
+  "updated_at": "2025-06-20T20:54:27.943367"
 } (custom_requests.py:54)
-2025-06-21 12:39:33 [INFO] Pushing updated users to VCS... (conftest.py:80)
+2025-06-21 12:46:37 [INFO] Pushing updated users to VCS... (conftest.py:80)

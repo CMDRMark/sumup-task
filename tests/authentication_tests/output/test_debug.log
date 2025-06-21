@@ -1,27 +1,27 @@
-2025-06-20 10:09:05 [INFO] Running tests in TEST environment (conftest.py:26)
-2025-06-20 10:09:06 [INFO] Created new user. 'username: CM0QQ, password: ZJF3X' (conftest.py:40)
-2025-06-20 10:09:06 [DEBUG] Request URL: https://global-bank-qa-challenge-external.fleet.dev.eu-west-1.sumup.net/api/auth/api/signup (custom_requests.py:13)
-2025-06-20 10:09:06 [DEBUG] Request Method: POST (custom_requests.py:14)
-2025-06-20 10:09:06 [DEBUG] Request Headers:
+2025-06-21 12:48:02 [INFO] Running tests in TEST environment (conftest.py:34)
+2025-06-21 12:48:02 [INFO] Sensitive information will be logged in full (conftest.py:49)
+2025-06-21 12:48:02 [INFO] Using existing registered user. username: U5CPY, password: *** (conftest.py:56)
+2025-06-21 12:48:02 [DEBUG] Request URL: https://global-bank-qa-challenge-external.fleet.dev.eu-west-1.sumup.net/api/auth/login (custom_requests.py:15)
+2025-06-21 12:48:02 [DEBUG] Request Method: POST (custom_requests.py:16)
+2025-06-21 12:48:02 [DEBUG] Request Headers:
 {
   "User-Agent": "python-requests/2.32.4",
   "Accept-Encoding": "gzip, deflate",
   "Accept": "*/*",
   "Connection": "keep-alive",
   "Content-Type": "application/json",
-  "Content-Length": "42"
-} (custom_requests.py:17)
-2025-06-20 10:09:06 [DEBUG] Request Body:
+  "Content-Length": "45"
+} (custom_requests.py:21)
+2025-06-21 12:48:02 [DEBUG] Request Body:
 {
-  "username": "CM0QQ",
-  "password": "ZJF3X"
-} (custom_requests.py:30)
-2025-06-20 10:09:06 [DEBUG] Response Status Code: 200 (custom_requests.py:32)
-2025-06-20 10:09:06 [DEBUG] Response Headers:
+  "username": "U5CPY",
+  "password": "***"
+} (custom_requests.py:37)
+2025-06-21 12:48:02 [DEBUG] Response Status Code: 401 (custom_requests.py:39)
+2025-06-21 12:48:02 [DEBUG] Response Headers:
 {
-  "Date": "Fri, 20 Jun 2025 17:09:07 GMT",
-  "Content-Type": "application/json",
-  "Transfer-Encoding": "chunked",
+  "Date": "Sat, 21 Jun 2025 19:48:02 GMT",
+  "Content-Length": "0",
   "Connection": "keep-alive",
   "x-content-type-options": "nosniff",
   "x-xss-protection": "0",
@@ -31,17 +31,10 @@
   "strict-transport-security": "max-age=31536000 ; includeSubDomains",
   "x-frame-options": "DENY",
   "cf-cache-status": "DYNAMIC",
-  "Set-Cookie": "__cf_bm=NDLwrMm0OeyjAoM4a1SXC5B7ucYr.Mj3oj4WCGAH23A-1750439347-1.0.1.1-aMhZYUFaGyTUMKX_Q5j8_jWOIqpZrCGiaaH9s4qI0CE964_ivKJ4yFwpWIeW4e.caMSwqGb.BlHOqrovNsKo0dMxL1yQ7_VrOfWIxivJtsKYCi4cpuUrhviI5cpPu3PB; path=/; expires=Fri, 20-Jun-25 17:39:07 GMT; domain=.sumup.net; HttpOnly; Secure; SameSite=None",
+  "Set-Cookie": "__cf_bm=8GmtSghxxeaYiD3Y.8mDcTs_rj3z9zzvpdjidEFyPm4-1750535282-1.0.1.1-OVBRc_ZlDtTbREzhp7ZOiImU.R4gZpDEZhQ6nkukySKPbF3.OM.UM9GgqWMBEuh6UCBYGHYCu3iT9kBf.as438MDLfafb4IySdG1SKG2DOA; path=/; expires=Sat, 21-Jun-25 20:18:02 GMT; domain=.sumup.net; HttpOnly; Secure; SameSite=None",
   "Server": "cloudflare",
-  "CF-RAY": "952cdf3c2a4332f6-EVN",
-  "Content-Encoding": "gzip"
-} (custom_requests.py:35)
-2025-06-20 10:09:06 [DEBUG] Response Body:
-{
-  "id": 72,
-  "username": "CM0QQ"
-} (custom_requests.py:43)
-2025-06-20 10:09:08 [DEBUG] Attempting to acquire lock 4450541840 on /Users/arman/PycharmProjects/sumup-task/user_accounts_resources/registered_users/TEST_ENV_USERS.json.lock (_api.py:331)
-2025-06-20 10:09:08 [DEBUG] Lock 4450541840 acquired on /Users/arman/PycharmProjects/sumup-task/user_accounts_resources/registered_users/TEST_ENV_USERS.json.lock (_api.py:334)
-2025-06-20 10:09:19 [DEBUG] Attempting to release lock 4450541840 on /Users/arman/PycharmProjects/sumup-task/user_accounts_resources/registered_users/TEST_ENV_USERS.json.lock (_api.py:364)
-2025-06-20 10:09:19 [DEBUG] Lock 4450541840 released on /Users/arman/PycharmProjects/sumup-task/user_accounts_resources/registered_users/TEST_ENV_USERS.json.lock (_api.py:367)
+  "CF-RAY": "95360569ec217d31-EVN"
+} (custom_requests.py:44)
+2025-06-21 12:48:02 [DEBUG] Response Body:
+ (custom_requests.py:54)
+2025-06-21 12:48:02 [INFO] Pushing updated users to VCS... (conftest.py:80)

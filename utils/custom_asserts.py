@@ -5,7 +5,7 @@ from typing import Type, Union
 from api_clients_and_models.models.response_validation_model import ResponseValidationResult, T
 
 
-def assert_response_schema(
+def validate_response_schema(
     model: Type[T],
     response: Response,
     expected_status: int = 200
@@ -25,7 +25,10 @@ def assert_response_schema(
             f"Server response does not match {model.__name__} schema:\n{e}\nRaw response: {response.text}"
         )
 
-    return ResponseValidationResult(data=parsed, errors=errors)
+    if errors:
+        raise AssertionError("\n".join(errors))
+    else:
+        return parsed
 
 
 def assert_sent_information_equals_to_received_information(
@@ -48,3 +51,21 @@ def assert_sent_information_equals_to_received_information(
 
     return sent_info_filtered == received_info_filtered
 
+
+def validate_incorrect_response(
+    response: Response,
+    status: int = 400,
+    message: str = None
+) -> None:
+
+    errors: list[str] = []
+    if response.status_code != status:
+        errors.append(
+            f"Expected status code {status}, got {response.status_code}"
+        )
+    if message and message not in response.text:
+        errors.append(
+            f"Expected message '{message}' not found in response: {response.text}"
+        )
+    if errors:
+        raise AssertionError("\n".join(errors))
