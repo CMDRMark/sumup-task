@@ -14,18 +14,35 @@ Below is a UML-style class diagram (Mermaid) showing the relationships between A
 classDiagram
     direction LR
 
+    package "Data Models" {
+        class Login {
+            +username: str
+            +password: str
+        }
+
+        class Signup {
+            +username: str
+            +password: str
+        }
+    }
+
     package "Core Application Models" {
         class User {
             +username: str
             +password: str
             +token: Optional[str]
+            +id: Optional[int]
             +bank_accounts: dict~BankAccount~
             +bank_account_creation_info: BankAccountCreationInfoModel
         }
 
         class BankAccount {
             +id: int
+            +first_name: str
+            +last_name: str
             +full_name: str
+            +date_of_birth: str
+            +initial_deposit: float
             +iban: Optional[str]
         }
 
@@ -33,6 +50,7 @@ classDiagram
             +first_name: str
             +last_name: str
             +date_of_birth: str
+            +initial_deposit: int
         }
 
         class BankAccountInfoResponseModel {
@@ -46,8 +64,10 @@ classDiagram
     package "API Clients" {
         class BAMAPIClient {
             +create_bank_account(user: User)
+            +get_bank_account_id(user: User, bank_account_id: str)
         }
         class AuthAPIClient {
+            +register_user_request(user: User)
             +login_user_request(user: User)
         }
     }
@@ -57,6 +77,7 @@ classDiagram
             +first_name: str
             +last_name: str
             +date_of_birth: str
+            +initial_deposit: int
             +expected_status_code: int
             +expected_error: str
         }
@@ -64,10 +85,14 @@ classDiagram
     }
 
     ' Relationships
-    BAMAPIClient ..> User : "uses for request"
+    BAMAPIClient ..> User : "uses for auth & data"
+    BAMAPIClient ..> BankAccountCreationInfoModel : "uses for payload"
     BAMAPIClient ..> BankAccountInfoResponseModel : "returns"
-    AuthAPIClient ..> User : "uses for request"
-
+    BAMAPIClient ..> AuthAPIClient : "depends on"
+    
+    AuthAPIClient ..> User : "uses for registration"
+    AuthAPIClient ..> Login : "uses for login"
+    
     User "1" *-- "1" BankAccountCreationInfoModel : "holds"
     User "1" *-- "0..*" BankAccount : "holds"
 
@@ -78,7 +103,7 @@ classDiagram
 ```
 
 ### How to read this diagram:
--   **Packages:** The components are grouped into `Core Application Models`, `API Clients`, and `Test Infrastructure` to clarify their roles.
+-   **Packages:** The components are grouped into `Data Models`, `Core Application Models`, `API Clients`, and `Test Infrastructure` to clarify their roles.
 -   **Relationships:**
     -   `*--` (Composition): A `User` is composed of its `BankAccount`s.
     -   `..>` (Dependency/Uses): `BAMAPIClient` depends on `User` for making requests.

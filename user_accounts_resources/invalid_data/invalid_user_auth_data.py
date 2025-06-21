@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 @dataclass
 class InvalidLoginData:
-    """Represents a single invalid account creation scenario."""
+    """Represents set of data for invalid login test scenarios."""
     username: Any
     password: Any
     expected_status: HTTPStatus = HTTPStatus.UNAUTHORIZED
@@ -38,7 +38,7 @@ invalid_login_data = {
 
 @dataclass
 class InvalidSignupData:
-    """Represents a single invalid signup scenario."""
+    """Represents set of data for invalid signup test scenarios."""
     username: Any
     password: Any
     expected_status: HTTPStatus = HTTPStatus.BAD_REQUEST
