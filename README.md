@@ -27,9 +27,9 @@ classDiagram
     class User {
         +username: str
         +password: str
-        +token: Optional[str]
-        +id: Optional[int]
-        +bank_accounts: dict~BankAccount~
+        +token: Optional~str~
+        +id: Optional~int~
+        +bank_accounts: dict of BankAccount
         +bank_account_creation_info: BankAccountCreationInfoModel
     }
 
@@ -40,7 +40,7 @@ classDiagram
         +full_name: str
         +date_of_birth: str
         +initial_deposit: float
-        +iban: Optional[str]
+        +iban: Optional~str~
     }
 
     class BankAccountCreationInfoModel {
@@ -53,7 +53,7 @@ classDiagram
     class BankAccountInfoResponseModel {
         +id: int
         +full_name: str
-        +iban: Optional[str]
+        +iban: Optional~str~
         +to_bank_account(): BankAccount
     }
 
@@ -61,6 +61,7 @@ classDiagram
         +create_bank_account(user: User)
         +get_bank_account_id(user: User, bank_account_id: str)
     }
+
     class AuthAPIClient {
         +register_user_request(user: User)
         +login_user_request(user: User)
@@ -74,24 +75,24 @@ classDiagram
         +expected_status_code: int
         +expected_error: str
     }
-    note for InvalidAccountScenario "Structures parameterized test data for invalid account creation tests."
 
-    ' Relationships
-    BAMAPIClient ..> User : "uses for auth & data"
-    BAMAPIClient ..> BankAccountCreationInfoModel : "uses for payload"
-    BAMAPIClient ..> BankAccountInfoResponseModel : "returns"
-    BAMAPIClient ..> AuthAPIClient : "depends on"
+    note for InvalidAccountScenario "Holds test data for invalid account creation."
+
+    %% Relationships
+    BAMAPIClient ..> User : uses
+    BAMAPIClient ..> BankAccountCreationInfoModel : uses
+    BAMAPIClient ..> BankAccountInfoResponseModel : returns
+    BAMAPIClient ..> AuthAPIClient : depends on
     
-    AuthAPIClient ..> User : "uses for registration"
-    AuthAPIClient ..> Login : "uses for login"
+    AuthAPIClient ..> User : uses
+    AuthAPIClient ..> Login : uses
     
-    User "1" *-- "1" BankAccountCreationInfoModel : "holds"
-    User "1" *-- "0..*" BankAccount : "holds"
+    User "1" *-- "1" BankAccountCreationInfoModel : holds
+    User "1" *-- "0..*" BankAccount : holds
 
-    BankAccountInfoResponseModel ..> BankAccount : "creates"
+    BankAccountInfoResponseModel ..> BankAccount : creates
 
-    ' Test-specific relationship (conceptual)
-    InvalidAccountScenario --o BankAccountCreationInfoModel : "provides data for"
+    InvalidAccountScenario --o BankAccountCreationInfoModel : provides data
 ```
 
 ### How to read this diagram:
