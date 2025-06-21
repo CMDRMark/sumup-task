@@ -80,8 +80,8 @@ classDiagram
 
     %% Relationships
     BAMAPIClient ..> User : uses
-    BAMAPIClient ..> BankAccountCreationInfoModel : uses
-    BAMAPIClient ..> BankAccountInfoResponseModel : returns
+    BAMAPIClient:create_bank_account ..> BankAccountCreationInfoModel : uses
+    BAMAPIClient:get_bank_account_id ..> BankAccountInfoResponseModel : returns
     BAMAPIClient ..> AuthAPIClient : depends on
     
     AuthAPIClient ..> User : uses
