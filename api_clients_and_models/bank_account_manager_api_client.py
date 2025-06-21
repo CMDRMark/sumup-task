@@ -30,8 +30,8 @@ class BAMAPIClient:
         self.headers: dict = {"Content-Type": "application/json"}
         self.auth_api_client = auth_api_client
 
-    def create_bank_account(self, first_name: str = None, last_name: str = None, date_of_birth: str = None, initial_deposit: int = None,
-                            token: str = None, user: User = None) -> Response:
+    def create_bank_account_request(self, first_name: str = None, last_name: str = None, date_of_birth: str = None, initial_deposit: int = None,
+                                    token: str = None, user: User = None) -> Response:
         headers = self.headers.copy()
 
         if token or user.token:
@@ -49,7 +49,7 @@ class BAMAPIClient:
 
         return resp
 
-    def get_bank_account_id(self, user: User = None, bank_account_id: str = None, token: str = None) -> Response:
+    def get_bank_account_id_request(self, user: User = None, bank_account_id: str = None, token: str = None) -> Response:
         headers = self.headers.copy()
         headers["X-API-KEY"] = token or user.token
 

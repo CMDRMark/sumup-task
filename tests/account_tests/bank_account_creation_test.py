@@ -15,7 +15,7 @@ def test_create_bank_account_for_new_user(bank_account_api_client, get_new_regis
     set_bank_account_creation_info_to_user(user=user, first_name="John", last_name="Doe", initial_deposit=1000,
                                            date_of_birth="1990-01-01")
 
-    response = bank_account_api_client.create_bank_account(user=user)
+    response = bank_account_api_client.create_bank_account_request(user=user)
 
     validate_response_schema(model=BankAccountInfoResponseModel, response=response, expected_status=HTTPStatus.OK)
 
@@ -39,7 +39,7 @@ def test_create_bank_account_for_existing_user(bank_account_api_client, get_regi
         set_bank_account_creation_info_to_user(user=user, first_name="John", last_name="Doe", initial_deposit=1000,
                                                date_of_birth="1990-01-01")
 
-    response = bank_account_api_client.create_bank_account(user=user)
+    response = bank_account_api_client.create_bank_account_request(user=user)
 
     validate_response_schema(model=BankAccountInfoResponseModel, response=response, expected_status=HTTPStatus.OK)
 
@@ -66,7 +66,7 @@ def test_create_bank_account_for_registered_user_with_invalid_data(test_params, 
                                            initial_deposit=test_params.initial_deposit,
                                            date_of_birth=test_params.date_of_birth)
 
-    response = bank_account_api_client.create_bank_account(user=user)
+    response = bank_account_api_client.create_bank_account_request(user=user)
 
     validate_incorrect_response(response,
                                 status=test_params.expected_status_code,
@@ -81,7 +81,7 @@ def test_create_bank_account_for_registered_user_with_invalid_data(test_params, 
 def test_create_bank_account_without_auth_token(bank_account_api_client,
                                                 get_registered_user_with_bank_account):
     user = get_registered_user_with_bank_account
-    response = bank_account_api_client.create_bank_account(user=user)
+    response = bank_account_api_client.create_bank_account_request(user=user)
 
     validate_response_schema(model=UnauthorizedResponseModel, response=response,
                              expected_status=HTTPStatus.FORBIDDEN)
@@ -92,7 +92,7 @@ def test_create_bank_account_with_incorrect_auth_token(bank_account_api_client,
     user = get_registered_and_logged_in_user_with_bank_account
     user.token += "_"
 
-    response = bank_account_api_client.create_bank_account(user=user)
+    response = bank_account_api_client.create_bank_account_request(user=user)
 
     validate_response_schema(model=UnauthorizedResponseModel, response=response,
                              expected_status=HTTPStatus.UNAUTHORIZED)
