@@ -1,6 +1,5 @@
 import random
 from typing import Optional
-
 from pydantic import BaseModel, Field
 
 from api_clients_and_models.models.bank_account_model import BankAccount, BankAccountCreationInfoModel

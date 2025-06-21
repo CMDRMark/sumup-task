@@ -8,7 +8,7 @@ class InvalidLoginData:
     """Represents a single invalid account creation scenario."""
     username: Any
     password: Any
-    expected_status: int = HTTPStatus.UNAUTHORIZED
+    expected_status: HTTPStatus = HTTPStatus.UNAUTHORIZED
     expected_message: str = "Invalid credentials"
 
 
@@ -41,7 +41,7 @@ class InvalidSignupData:
     """Represents a single invalid signup scenario."""
     username: Any
     password: Any
-    expected_status: int = HTTPStatus.BAD_REQUEST
+    expected_status: HTTPStatus = HTTPStatus.BAD_REQUEST
     expected_message: str = "Invalid input data"
 
 

@@ -62,7 +62,6 @@ invalid_initial_deposits = {
     "XSS Initial Deposit": InvalidAccountScenario("John", "Doe", "1990-01-01", "<script>alert('XSS');</script>", HTTPStatus.BAD_REQUEST, "Initial deposit must be a number.")
 }
 
-
 invalid_date_of_birth = {
     "Empty Date of Birth": InvalidAccountScenario("John", "Doe", "", 1000, HTTPStatus.BAD_REQUEST, "Date of birth cannot be empty."),
     "Invalid Date Format": InvalidAccountScenario("John", "Doe", "01-01-1990", 1000, HTTPStatus.BAD_REQUEST, "Date of birth must be in YYYY-MM-DD format."),

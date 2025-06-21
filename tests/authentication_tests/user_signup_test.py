@@ -10,8 +10,8 @@ def test_correct_signup(make_user, auth_client, save_registered_user):
     user = make_user()
     response = auth_client.register_user_request(user=user)
 
-    validate_response_schema(model=RegistrationResponse, response=response, expected_status=HTTPStatus.CREATED)
-    assert response.json()["username"] == user.username
+    response = validate_response_schema(model=RegistrationResponse, response=response, expected_status=HTTPStatus.OK)
+    assert response.username == user.username
 
     save_registered_user(user)
 

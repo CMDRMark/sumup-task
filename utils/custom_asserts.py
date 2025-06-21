@@ -1,18 +1,18 @@
-from pydantic import ValidationError
+from pydantic import ValidationError, BaseModel
 from requests import Response
-from typing import Type, Union
+from typing import Type, Union, TypeVar
 
-from api_clients_and_models.models.response_validation_model import ResponseValidationResult, T
+
+T = TypeVar('T', bound=BaseModel)
 
 
 def validate_response_schema(
     model: Type[T],
     response: Response,
     expected_status: int = 200
-) -> ResponseValidationResult[T]:
+) -> T:
     errors: list[str] = []
-    parsed: T | None = None
-
+    parsed: Union[T, None] = None
     if response.status_code != expected_status:
         errors.append(
             f"HTTP status code {response.status_code} is not equal to expected status {expected_status}"
@@ -27,8 +27,10 @@ def validate_response_schema(
 
     if errors:
         raise AssertionError("\n".join(errors))
-    else:
+    elif parsed:
         return parsed
+    else:
+        raise AssertionError(f"Response does not match {model.__name__} schema")
 
 
 def assert_sent_information_equals_to_received_information(
