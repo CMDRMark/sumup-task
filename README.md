@@ -14,12 +14,12 @@ Below is a UML-style class diagram (Mermaid) showing the relationships between A
 classDiagram
     direction LR
 
-    class Login {
+    class LoginData {
         +username: str
         +password: str
     }
 
-    class Signup {
+    class SignupData {
         +username: str
         +password: str
     }
@@ -33,7 +33,7 @@ classDiagram
         +bank_account_creation_info: BankAccountCreationInfoModel
     }
 
-    class BankAccount {
+    class BankAccountModel {
         +id: int
         +first_name: str
         +last_name: str
@@ -76,7 +76,7 @@ classDiagram
         +expected_error: str
     }
 
-    note for InvalidAccountScenario "Holds test data for invalid account creation."
+    note for InvalidAccountScenario "Holds test data for invalid Bank account creation scenarios."
 
     %% Relationships
     BAMAPIClient ..> User : uses
@@ -85,14 +85,15 @@ classDiagram
     BAMAPIClient ..> AuthAPIClient : depends on
     
     AuthAPIClient ..> User : uses
-    AuthAPIClient ..> Login : uses
+    AuthAPIClient ..> LoginData : uses
+    AuthAPIClient ..> SignupData : uses
     
     User "1" *-- "1" BankAccountCreationInfoModel : holds
     User "1" *-- "0..*" BankAccount : holds
 
     BankAccountInfoResponseModel ..> BankAccount : creates
 
-    InvalidAccountScenario --o BankAccountCreationInfoModel : provides data
+%%    InvalidAccountScenario --o BankAccountCreationInfoModel : provides data
 ```
 
 ### How to read this diagram:
