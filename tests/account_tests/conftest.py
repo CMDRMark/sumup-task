@@ -29,7 +29,7 @@ def get_registered_and_logged_in_user(auth_client, get_random_existing_registere
 
 
 @pytest.fixture(scope="function")
-def get_registered_and_logged_in_user_with_bank_account(auth_client, get_registered_user_with_bank_account, bank_account_client):
+def get_registered_and_logged_in_user_with_bank_account(auth_client, get_registered_user_with_bank_account):
     user = get_registered_user_with_bank_account
     response = auth_client.login_user_request(user=user)
     if response.status_code == 200:

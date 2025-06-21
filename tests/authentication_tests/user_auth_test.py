@@ -21,17 +21,20 @@ def test_login_with_newly_created_user(auth_client, register_new_user):
     validate_response_schema(model=LoginResponseModel, response=response, expected_status=HTTPStatus.OK)
 
 
-@pytest.mark.parametrize("scenario_params", invalid_login_data.values(), ids=invalid_login_data.keys())
-def test_incorrect_login(make_user, auth_client, scenario_params):
-    response = auth_client.login_user_request(username=scenario_params.username, password=scenario_params.password)
-
-    validate_incorrect_response(response=response, status=scenario_params.status_code,
-                                message=scenario_params.expected_message)
+@pytest.mark.parametrize("test_params", invalid_login_data.values(), ids=invalid_login_data.keys())
+def test_incorrect_login(make_user, auth_client, test_params):
     # Generic test for incorrect login data, does not validate response schemas,
     # since this endpoint is out of test task scope
 
+    response = auth_client.login_user_request(username=test_params.username, password=test_params.password)
+
+    validate_incorrect_response(response=response, status=test_params.status_code,
+                                message=test_params.expected_message)
+
 
 def test_login_with_incorrect_password(auth_client, get_random_existing_registered_user):
+    # Test fails since no response body is returned for this specific case.
+
     user = get_random_existing_registered_user
     response = auth_client.login_user_request(username=user.username, password=f"{user.password}123")
 

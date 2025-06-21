@@ -49,6 +49,7 @@ def configure_secrets_logging(request, get_env):
         logger.info("Sensitive information will be logged in full")
     os.environ["HIDE_SECRETS"] = "1" if hide_secrets else "0"
 
+
 @pytest.fixture(scope='session')
 def save_registered_users_flag(request):
     yield request.config.getoption("--save-registered-users")

@@ -8,100 +8,130 @@ This project provides a robust, extensible, and maintainable automation suite fo
 
 ## System Architecture
 
-Below is a UML-style class diagram (Mermaid) showing the relationships between API clients, models, and their interactions:
+Below is a UML-style class diagram (Mermaid) showing the relationships between API clients, core application models, and test-specific data models.
 
 ```mermaid
 classDiagram
-    %% Models
-    class User {
-        +username: str
-        +password: str
-        +token: Optional[str]
-        +id: int
-        +bank_accounts: dict[str, BankAccount]
-        +bank_account_creation_info: BankAccountCreationInfoModel
-        +to_dict()
-        +get_random_bank_account_id()
-        +get_random_bank_account_info()
-        +get_bank_account_info_by_id()
+    direction LR
+
+    package "Core Application Models" {
+        class User {
+            +username: str
+            +password: str
+            +token: Optional[str]
+            +bank_accounts: dict~BankAccount~
+            +bank_account_creation_info: BankAccountCreationInfoModel
+        }
+
+        class BankAccount {
+            +id: int
+            +full_name: str
+            +iban: Optional[str]
+        }
+
+        class BankAccountCreationInfoModel {
+            +first_name: str
+            +last_name: str
+            +date_of_birth: str
+        }
+
+        class BankAccountInfoResponseModel {
+            +id: int
+            +full_name: str
+            +iban: Optional[str]
+            +to_bank_account(): BankAccount
+        }
     }
 
-    class BankAccount {
-        +id: int
-        +first_name: str
-        +last_name: str
-        +full_name: str
-        +date_of_birth: str
-        +initial_deposit: float
-        +iban_issuance_status: str
-        +created_at: str
-        +updated_at: str
-        +iban: Optional[str]
-        +to_dict()
-        +diff()
+    package "API Clients" {
+        class BAMAPIClient {
+            +create_bank_account(user: User)
+        }
+        class AuthAPIClient {
+            +login_user_request(user: User)
+        }
     }
 
-    class BankAccountCreationInfoModel {
-        +first_name: Optional[str]
-        +last_name: Optional[str]
-        +date_of_birth: Optional[str]
-        +initial_deposit: Optional[int]
-        +to_dict()
+    package "Test Infrastructure" {
+        class InvalidAccountScenario {
+            +first_name: str
+            +last_name: str
+            +date_of_birth: str
+            +expected_status_code: int
+            +expected_error: str
+        }
+        note for InvalidAccountScenario "Structures parameterized test data for invalid account creation tests."
     }
 
-    class BankAccountInfoResponseModel {
-        +id: int
-        +first_name: str
-        +last_name: str
-        +date_of_birth: str
-        +initial_deposit: float
-        +full_name: str
-        +iban_issuance_status: str
-        +iban: Optional[str]
-        +created_at: str
-        +updated_at: str
-        +to_bank_account(): BankAccount
-    }
+    ' Relationships
+    BAMAPIClient ..> User : "uses for request"
+    BAMAPIClient ..> BankAccountInfoResponseModel : "returns"
+    AuthAPIClient ..> User : "uses for request"
 
-    class RegistrationResponse {
-        +id: int
-        +username: str
-    }
+    User "1" *-- "1" BankAccountCreationInfoModel : "holds"
+    User "1" *-- "0..*" BankAccount : "holds"
 
-    class LoginResponseModel {
-        +api_key: str
-        +expires_at: datetime
-    }
+    BankAccountInfoResponseModel ..> BankAccount : "creates"
 
-    %% API Clients
-    class AuthAPIClient {
-        +register_user_request(user: User)
-        +login_user_request(user: User)
-    }
-
-    class BAMAPIClient {
-        +create_bank_account(user: User)
-        +get_bank_account_id(user: User, bank_account_id: str)
-    }
-
-    %% Relationships
-    User "1" o-- "*" BankAccount : bank_accounts
-    User "1" o-- "1" BankAccountCreationInfoModel : bank_account_creation_info
-    BankAccountInfoResponseModel "1" --> "1" BankAccount : to_bank_account()
-    AuthAPIClient ..> User : uses
-    AuthAPIClient ..> RegistrationResponse : returns
-    AuthAPIClient ..> LoginResponseModel : returns
-    BAMAPIClient ..> User : uses
-    BAMAPIClient ..> BankAccountCreationInfoModel : uses (via User)
-    BAMAPIClient ..> BankAccountInfoResponseModel : returns
+    ' Test-specific relationship (conceptual)
+    InvalidAccountScenario --o BankAccountCreationInfoModel : "provides data for"
 ```
 
-**How to read this diagram:**  
-- Solid lines (`o--`, `--`) show composition/aggregation (e.g., `User` has many `BankAccount`).
-- Dashed lines (`..>`) show usage or return types (e.g., `AuthAPIClient` returns `RegistrationResponse`).
-- Methods on models/clients are shown for key interactions.
-- API Clients use models for requests and responses.
+### How to read this diagram:
+-   **Packages:** The components are grouped into `Core Application Models`, `API Clients`, and `Test Infrastructure` to clarify their roles.
+-   **Relationships:**
+    -   `*--` (Composition): A `User` is composed of its `BankAccount`s.
+    -   `..>` (Dependency/Uses): `BAMAPIClient` depends on `User` for making requests.
+    -   `--o` (Aggregation): `InvalidAccountScenario` is used to provide data for creating `BankAccountCreationInfoModel` in tests.
+-   **Notes:** Provide extra context, such as the purpose of the `InvalidAccountScenario` class.
 
 ---
 
-## [Add further sections here for: Setup, Running Tests, Configuration, Reporting, Known Issues, TODOs, etc.]
+## Setup & Execution
+
+### Prerequisites
+- Python 3.10+
+- Pip (Python package installer)
+
+### Installation
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repo-url>
+    cd <repo-name>
+    ```
+2.  **Create and activate a virtual environment:**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+    ```
+3.  **Install dependencies:**
+    *(Assuming you have a `requirements.txt` file)*
+    ```bash
+    pip install pytest pydantic requests
+    ```
+
+### Running Tests
+-   **Run all tests:**
+    ```bash
+    pytest
+    ```
+-   **Run tests for a specific environment (e.g., TEST):**
+    ```bash
+    pytest --env=TEST
+    ```
+-   **Save newly created users to the data file:**
+    ```bash
+    pytest --save-new-user
+    ```
+
+## Configuration
+The test suite can be configured for different environments (e.g., `TEST`, `STAGING`). Environment-specific parameters like the base URL are managed via fixtures that are selected by the `--env` command-line flag.
+
+-   **Base URL:** Set in `tests/conftest.py`.
+-   **API Key:** Handled automatically upon user login.
+-   **Test Data:** Stored in `user_accounts_resources/` for each environment.
+
+## Known Issues & TODOs
+-   **Bug:** The API returns a `411 Length Required` status code for some invalid account creation requests instead of a more appropriate `400 Bad Request`. This is noted in `test_create_bank_account_with_invalid_data`.
+-   **TODO:** Implement logic to separately verify the `initial_deposit` calculation, as its value in the response may differ from the request due to backend processing.
+-   **TODO:** Enhance the test reports with more detailed context for failures.

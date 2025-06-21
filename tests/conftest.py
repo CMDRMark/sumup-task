@@ -1,57 +1,19 @@
 import pytest
-import random
 import os
 
-from api_clients_and_models.models.bank_account_model import BankAccount, BankAccountCreationInfoModel
+from api_clients_and_models.models.bank_account_model import BankAccountCreationInfoModel
 from api_clients_and_models.models.user_model import User
 from utils.signup_utils import get_random_username, get_random_password
-from utils.user_data_manager import load_users, save_new_user
+from utils.user_data_manager import load_users, save_new_user, select_random_user
 from utils.logger import logger
 from api_clients_and_models.auth_api_client import AuthAPIClient
 from api_clients_and_models.bank_account_manager_api_client import BAMAPIClient
 
 
-def _select_random_user(users: dict, must_have_bank_account: bool = False) -> User:
-    """
-    Selects a random user from the given users.
-    Parses nested objects properly: bank_accounts and bank_account_creation_info.
-    Handles missing or empty cases gracefully.
-    """
-    if must_have_bank_account:
-        users = {
-            uid: u for uid, u in users.items()
-            if u.get("bank_accounts") and len(u["bank_accounts"]) > 0
-        }
-
-    if not users:
-        raise ValueError(
-            "No registered users{} found in the environment data.".format(
-                " with bank accounts" if must_have_bank_account else ""
-            )
-        )
-
-    index = random.choice(list(users.keys()))
-    user_data = users[index]
-
-    if user_data.get("bank_accounts"):
-        raw_accounts = user_data["bank_accounts"]
-        if isinstance(raw_accounts, dict) and raw_accounts:
-            user_data["bank_accounts"] = {
-                k: BankAccount(**v) for k, v in raw_accounts.items()
-            }
-
-    if user_data.get("bank_account_creation_info"):
-        raw_info = user_data["bank_account_creation_info"]
-        if raw_info is not None:
-            user_data["bank_account_creation_info"] = BankAccountCreationInfoModel(**raw_info)
-
-    return User(**user_data)
-
-
 @pytest.fixture(scope="function")
 def get_random_existing_registered_user(get_env) -> User:
     users = load_users(env=get_env)
-    user = _select_random_user(users, must_have_bank_account=False)
+    user = select_random_user(users, must_have_bank_account=False)
 
     logger.info(
         f"Using existing registered user. "
@@ -64,7 +26,7 @@ def get_random_existing_registered_user(get_env) -> User:
 @pytest.fixture(scope="function")
 def get_registered_user_with_bank_account(get_env) -> User:
     users = load_users(env=get_env)
-    return _select_random_user(users, must_have_bank_account=True)
+    return select_random_user(users, must_have_bank_account=True)
 
 
 @pytest.fixture(scope="session")
@@ -73,7 +35,7 @@ def auth_client(get_base_url):
 
 
 @pytest.fixture(scope="session")
-def bank_account_client(get_base_url):
+def bank_account_api_client(get_base_url):
     return BAMAPIClient(base_url=get_base_url)
 
 

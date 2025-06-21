@@ -1,21 +1,28 @@
-2025-06-21 12:46:37 [INFO] Running tests in TEST environment (conftest.py:34)
-2025-06-21 12:46:37 [INFO] Sensitive information will be logged in full (conftest.py:49)
-2025-06-21 12:46:37 [DEBUG] Request URL: https://global-bank-qa-challenge-external.fleet.dev.eu-west-1.sumup.net/api/accounts/35 (custom_requests.py:15)
-2025-06-21 12:46:37 [DEBUG] Request Method: GET (custom_requests.py:16)
-2025-06-21 12:46:37 [DEBUG] Request Headers:
+2025-06-21 13:29:17 [INFO] Running tests in TEST environment (conftest.py:34)
+2025-06-21 13:29:17 [INFO] Sensitive information will be logged in full (conftest.py:49)
+2025-06-21 13:29:18 [DEBUG] Request URL: https://global-bank-qa-challenge-external.fleet.dev.eu-west-1.sumup.net/api/accounts (custom_requests.py:15)
+2025-06-21 13:29:18 [DEBUG] Request Method: POST (custom_requests.py:16)
+2025-06-21 13:29:18 [DEBUG] Request Headers:
 {
   "User-Agent": "python-requests/2.32.4",
   "Accept-Encoding": "gzip, deflate",
   "Accept": "*/*",
   "Connection": "keep-alive",
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
+  "X-API-KEY": "***",
+  "Content-Length": "98"
 } (custom_requests.py:21)
-2025-06-21 12:46:37 [DEBUG] Request Body:
-None (custom_requests.py:37)
-2025-06-21 12:46:37 [DEBUG] Response Status Code: 200 (custom_requests.py:39)
-2025-06-21 12:46:37 [DEBUG] Response Headers:
+2025-06-21 13:29:18 [DEBUG] Request Body:
 {
-  "Date": "Sat, 21 Jun 2025 19:46:37 GMT",
+  "first_name": "John",
+  "last_name": "Doe",
+  "date_of_birth": "1990-01-01",
+  "initial_deposit": 1000
+} (custom_requests.py:37)
+2025-06-21 13:29:18 [DEBUG] Response Status Code: 403 (custom_requests.py:39)
+2025-06-21 13:29:18 [DEBUG] Response Headers:
+{
+  "Date": "Sat, 21 Jun 2025 20:29:18 GMT",
   "Content-Type": "application/json",
   "Transfer-Encoding": "chunked",
   "Connection": "keep-alive",
@@ -27,22 +34,17 @@ None (custom_requests.py:37)
   "strict-transport-security": "max-age=31536000 ; includeSubDomains",
   "x-frame-options": "DENY",
   "cf-cache-status": "DYNAMIC",
-  "Set-Cookie": "__cf_bm=XIUAvsbsSoLUqIUnLDPCqvWCD.6cMa0PijTq1HVsnaA-1750535197-1.0.1.1-CY0IfVXhsLRdpoZ55w4r0Jvj3pgFHp9ho9HyK8TQKBPencfxdq0WdrgiLYn.pfWT0xMy2gU4dotaz7khAJDvCgfAns.6KGQxpMXvfc7Kdwg; path=/; expires=Sat, 21-Jun-25 20:16:37 GMT; domain=.sumup.net; HttpOnly; Secure; SameSite=None",
+  "Set-Cookie": "__cf_bm=ve1qkKMYspgiheqQ0nowjrpYPq1aGlJD87ku2PRAp.w-1750537758-1.0.1.1-9XMsEYH_UqUBqtIIFFj2oW2nXv_WwRHVapFigTO9atUNY_4IJn_YNH5zzXn_gJSVzuBiaPYQhcvo.anOK.yayAWxmWzkmdWJa986_8O3TB4; path=/; expires=Sat, 21-Jun-25 20:59:18 GMT; domain=.sumup.net; HttpOnly; Secure; SameSite=None",
   "Server": "cloudflare",
-  "CF-RAY": "9536035789d67d1d-EVN",
+  "CF-RAY": "953641db9d56331a-EVN",
   "Content-Encoding": "gzip"
 } (custom_requests.py:44)
-2025-06-21 12:46:37 [DEBUG] Response Body:
+2025-06-21 13:29:18 [DEBUG] Response Body:
 {
-  "id": 35,
-  "first_name": "John",
-  "last_name": "Doe",
-  "date_of_birth": "1990-01-01",
-  "initial_deposit": 999.99,
-  "full_name": "John Doe",
-  "iban_issuance_status": "SUCCESSFUL",
-  "iban": "GB38SUPA04145000000035",
-  "created_at": "2025-06-20T20:54:24.114097",
-  "updated_at": "2025-06-20T20:54:27.943367"
+  "timestamp": "2025-06-21T20:29:18.359+00:00",
+  "status": 403,
+  "error": "Forbidden",
+  "message": "Access Denied",
+  "path": "/api/accounts"
 } (custom_requests.py:54)
-2025-06-21 12:46:37 [INFO] Pushing updated users to VCS... (conftest.py:80)
+2025-06-21 13:29:18 [INFO] Pushing updated users to VCS... (conftest.py:80)
