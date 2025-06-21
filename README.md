@@ -14,75 +14,67 @@ Below is a UML-style class diagram (Mermaid) showing the relationships between A
 classDiagram
     direction LR
 
-    package "Data Models" {
-        class Login {
-            +username: str
-            +password: str
-        }
-
-        class Signup {
-            +username: str
-            +password: str
-        }
+    class Login {
+        +username: str
+        +password: str
     }
 
-    package "Core Application Models" {
-        class User {
-            +username: str
-            +password: str
-            +token: Optional[str]
-            +id: Optional[int]
-            +bank_accounts: dict~BankAccount~
-            +bank_account_creation_info: BankAccountCreationInfoModel
-        }
-
-        class BankAccount {
-            +id: int
-            +first_name: str
-            +last_name: str
-            +full_name: str
-            +date_of_birth: str
-            +initial_deposit: float
-            +iban: Optional[str]
-        }
-
-        class BankAccountCreationInfoModel {
-            +first_name: str
-            +last_name: str
-            +date_of_birth: str
-            +initial_deposit: int
-        }
-
-        class BankAccountInfoResponseModel {
-            +id: int
-            +full_name: str
-            +iban: Optional[str]
-            +to_bank_account(): BankAccount
-        }
+    class Signup {
+        +username: str
+        +password: str
     }
 
-    package "API Clients" {
-        class BAMAPIClient {
-            +create_bank_account(user: User)
-            +get_bank_account_id(user: User, bank_account_id: str)
-        }
-        class AuthAPIClient {
-            +register_user_request(user: User)
-            +login_user_request(user: User)
-        }
+    class User {
+        +username: str
+        +password: str
+        +token: Optional[str]
+        +id: Optional[int]
+        +bank_accounts: dict~BankAccount~
+        +bank_account_creation_info: BankAccountCreationInfoModel
     }
 
-    package "Test Infrastructure" {
-        class InvalidAccountScenario {
-            +first_name: str
-            +last_name: str
-            +date_of_birth: str
-            +initial_deposit: int
-            +expected_status_code: int
-            +expected_error: str
-        }
-        note for InvalidAccountScenario "Structures parameterized test data for invalid account creation tests."
+    class BankAccount {
+        +id: int
+        +first_name: str
+        +last_name: str
+        +full_name: str
+        +date_of_birth: str
+        +initial_deposit: float
+        +iban: Optional[str]
     }
+
+    class BankAccountCreationInfoModel {
+        +first_name: str
+        +last_name: str
+        +date_of_birth: str
+        +initial_deposit: int
+    }
+
+    class BankAccountInfoResponseModel {
+        +id: int
+        +full_name: str
+        +iban: Optional[str]
+        +to_bank_account(): BankAccount
+    }
+
+    class BAMAPIClient {
+        +create_bank_account(user: User)
+        +get_bank_account_id(user: User, bank_account_id: str)
+    }
+    class AuthAPIClient {
+        +register_user_request(user: User)
+        +login_user_request(user: User)
+    }
+
+    class InvalidAccountScenario {
+        +first_name: str
+        +last_name: str
+        +date_of_birth: str
+        +initial_deposit: int
+        +expected_status_code: int
+        +expected_error: str
+    }
+    note for InvalidAccountScenario "Structures parameterized test data for invalid account creation tests."
 
     ' Relationships
     BAMAPIClient ..> User : "uses for auth & data"
@@ -103,7 +95,6 @@ classDiagram
 ```
 
 ### How to read this diagram:
--   **Packages:** The components are grouped into `Data Models`, `Core Application Models`, `API Clients`, and `Test Infrastructure` to clarify their roles.
 -   **Relationships:**
     -   `*--` (Composition): A `User` is composed of its `BankAccount`s.
     -   `..>` (Dependency/Uses): `BAMAPIClient` depends on `User` for making requests.
