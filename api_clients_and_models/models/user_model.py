@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from api_client.models.bank_account_model import BankAccount, BankAccountCreationInfoModel
+from api_clients_and_models.models.bank_account_model import BankAccount, BankAccountCreationInfoModel
 
 
 class User(BaseModel):

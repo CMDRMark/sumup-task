@@ -1,7 +1,7 @@
 import json
 from json import JSONDecodeError
 from pathlib import Path
-from api_client.models.user_model import User
+from api_clients_and_models.models.user_model import User
 from filelock import FileLock
 from utils.logger import logger
 

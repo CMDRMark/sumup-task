@@ -1,8 +1,8 @@
 import pytest
 
-from api_client.models.bank_account_model import BankAccountCreationInfoModel
+from api_clients_and_models.models.bank_account_model import BankAccountCreationInfoModel
 from utils.logger import logger
-from api_client.models.user_model import User
+from api_clients_and_models.models.user_model import User
 
 
 @pytest.fixture(scope="function")

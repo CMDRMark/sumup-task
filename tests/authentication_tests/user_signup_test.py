@@ -1,7 +1,7 @@
 import pytest
 from http import HTTPStatus
 
-from api_client.models.signup_models import RegistrationResponse
+from api_clients_and_models.models.signup_models import RegistrationResponse
 from user_accounts_resources.invalid_data.invalid_user_auth_data import invalid_signup_data
 from utils.custom_asserts import assert_response_schema
 

@@ -1,6 +1,6 @@
 import pytest
 from http import HTTPStatus
-from api_client.models.login_models import LoginResponseModel
+from api_clients_and_models.models.login_models import LoginResponseModel
 from user_accounts_resources.invalid_data.invalid_user_auth_data import invalid_login_data
 from utils.custom_asserts import assert_response_schema
 

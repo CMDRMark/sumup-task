@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from requests import Response
 
-from api_client.models.user_model import User
+from api_clients_and_models.models.user_model import User
 from utils.custom_requests import post_request
 
 

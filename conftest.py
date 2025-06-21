@@ -1,8 +1,10 @@
 import pytest
+
+from api_clients_and_models.url_mapping import BASE_URLS
+from utils.logger import logger
 import os
 
-from api_client.url_mapping import BASE_URLS
-from utils.logger import logger
+os.environ["PYDANTIC_ERRORS_OMIT_URL"] = "1"
 
 
 def pytest_addoption(parser):

@@ -2,13 +2,13 @@ import pytest
 import random
 import os
 
-from api_client.models.bank_account_model import BankAccount, BankAccountCreationInfoModel
-from api_client.models.user_model import User
+from api_clients_and_models.models.bank_account_model import BankAccount, BankAccountCreationInfoModel
+from api_clients_and_models.models.user_model import User
 from utils.signup_utils import get_random_username, get_random_password
 from utils.user_data_manager import load_users, save_new_user
 from utils.logger import logger
-from api_client.auth_api_client import AuthAPIClient
-from api_client.bank_account_manager_api_client import BAMAPIClient
+from api_clients_and_models.auth_api_client import AuthAPIClient
+from api_clients_and_models.bank_account_manager_api_client import BAMAPIClient
 
 
 def _select_random_user(users: dict, must_have_bank_account: bool = False) -> User:
