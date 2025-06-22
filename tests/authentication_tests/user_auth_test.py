@@ -2,7 +2,7 @@ import pytest
 from http import HTTPStatus
 from api_clients_and_models.models.login_models import LoginResponseModel
 from api_clients_and_models.models.unauthorized_response_model import UnauthorizedResponseModel
-from user_accounts_resources.invalid_data.invalid_user_auth_data import invalid_login_data
+from test_data.invalid_data.invalid_user_auth_data import invalid_login_data
 from utils.custom_asserts import validate_response_schema, validate_incorrect_response
 
 

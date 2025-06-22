@@ -18,23 +18,13 @@ def set_bank_account_creation_info_to_user():
 @pytest.fixture(scope="function")
 def get_registered_and_logged_in_user(auth_client, get_random_existing_registered_user):
     user = get_random_existing_registered_user
-    response = auth_client.login_user_request(user=user)
-
-    if response.status_code == 200:
-        logger.info(f"Logged in as existing user: {user.username}")
-        return user
-    else:
-        logger.error(f"Failed to log in as existing user: {user.username}, status code: {response.status_code}")
-        return None
+    auth_client.set_auth_token_to_user(user=user)
+    return user
 
 
 @pytest.fixture(scope="function")
 def get_registered_and_logged_in_user_with_bank_account(auth_client, get_registered_user_with_bank_account):
     user = get_registered_user_with_bank_account
-    response = auth_client.login_user_request(user=user)
-    if response.status_code == 200:
-        logger.info(f"Logged in as existing user: {user.username}")
-        return user
-    else:
-        logger.error(f"Failed to log in as existing user: {user.username}, status code: {response.status_code}")
-        return None
+    auth_client.set_auth_token_to_user(user=user)
+
+    return user

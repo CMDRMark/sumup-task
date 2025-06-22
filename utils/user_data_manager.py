@@ -10,7 +10,7 @@ from utils.logger import logger
 
 
 def _get_file_path(env: str) -> Path:
-    return Path(__file__).parent.parent / "user_accounts_resources" / "registered_users" / f"{env}_ENV_USERS.json"
+    return Path(__file__).parent.parent / "test_data" / "registered_users" / f"{env}_ENV_USERS.json"
 
 
 
@@ -18,7 +18,8 @@ def load_users(env: str) -> dict:
     file_path = _get_file_path(env)
 
     if not file_path.exists():
-        raise ValueError(f"No user JSON found for env '{env}'")
+        logger.info(f"File {file_path} not found. Creating a new one.")
+        file_path.parent.mkdir(parents=True, exist_ok=True)
 
     lock = FileLock(str(file_path) + ".lock")
 

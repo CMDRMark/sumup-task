@@ -25,10 +25,9 @@ class AccountEndpoints:
 
 
 class BAMAPIClient:
-    def __init__(self, base_url: str, auth_api_client: AuthAPIClient = None):
+    def __init__(self, base_url: str):
         self.urls = AccountEndpoints(base_url)
         self.headers: dict = {"Content-Type": "application/json"}
-        self.auth_api_client = auth_api_client
 
     def create_bank_account_request(self, first_name: str = None, last_name: str = None, date_of_birth: str = None, initial_deposit: int = None,
                                     token: str = None, user: User = None) -> Response:

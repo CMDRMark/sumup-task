@@ -1,27 +1,28 @@
-2025-06-21 13:29:35 [INFO] Running tests in TEST environment (conftest.py:34)
-2025-06-21 13:29:35 [INFO] Sensitive information will be logged in full (conftest.py:49)
-2025-06-21 13:29:35 [INFO] Using existing registered user. username: HR5OM, password: *** (conftest.py:56)
-2025-06-21 13:29:36 [DEBUG] Request URL: https://global-bank-qa-challenge-external.fleet.dev.eu-west-1.sumup.net/api/auth/login (custom_requests.py:15)
-2025-06-21 13:29:36 [DEBUG] Request Method: POST (custom_requests.py:16)
-2025-06-21 13:29:36 [DEBUG] Request Headers:
+2025-06-22 02:46:55 [INFO] Running tests in TEST environment (conftest.py:34)
+2025-06-22 02:46:55 [INFO] Sensitive information will be logged in full (conftest.py:49)
+2025-06-22 02:46:55 [INFO] Using existing registered user. username: IOETQ, password: *** (conftest.py:18)
+2025-06-22 02:46:56 [DEBUG] Request URL: https://global-bank-qa-challenge-external.fleet.dev.eu-west-1.sumup.net/api/auth/api/signup (custom_requests.py:15)
+2025-06-22 02:46:56 [DEBUG] Request Method: POST (custom_requests.py:16)
+2025-06-22 02:46:56 [DEBUG] Request Headers:
 {
   "User-Agent": "python-requests/2.32.4",
   "Accept-Encoding": "gzip, deflate",
   "Accept": "*/*",
   "Connection": "keep-alive",
   "Content-Type": "application/json",
-  "Content-Length": "45"
+  "Content-Length": "42"
 } (custom_requests.py:21)
-2025-06-21 13:29:36 [DEBUG] Request Body:
+2025-06-22 02:46:56 [DEBUG] Request Body:
 {
-  "username": "HR5OM",
+  "username": "IOETQ",
   "password": "***"
 } (custom_requests.py:37)
-2025-06-21 13:29:36 [DEBUG] Response Status Code: 401 (custom_requests.py:39)
-2025-06-21 13:29:36 [DEBUG] Response Headers:
+2025-06-22 02:46:56 [DEBUG] Response Status Code: 409 (custom_requests.py:39)
+2025-06-22 02:46:56 [DEBUG] Response Headers:
 {
-  "Date": "Sat, 21 Jun 2025 20:29:36 GMT",
-  "Content-Length": "0",
+  "Date": "Sun, 22 Jun 2025 09:46:56 GMT",
+  "Content-Type": "application/json",
+  "Transfer-Encoding": "chunked",
   "Connection": "keep-alive",
   "x-content-type-options": "nosniff",
   "x-xss-protection": "0",
@@ -31,10 +32,16 @@
   "strict-transport-security": "max-age=31536000 ; includeSubDomains",
   "x-frame-options": "DENY",
   "cf-cache-status": "DYNAMIC",
-  "Set-Cookie": "__cf_bm=DIrOCu66BRDNR3KEI9vngrGx3Jo9U3YjulroB.99I8E-1750537776-1.0.1.1-GaXLZC7C5ghPYS1HHbm_1zxx_fUjahIFuy7_Y8PNtcbD8eRtttz_1iaKNMQev.Hv7z8q600odZSS4o0iqypWvt9McBbL6bVomPodiktD5TI; path=/; expires=Sat, 21-Jun-25 20:59:36 GMT; domain=.sumup.net; HttpOnly; Secure; SameSite=None",
+  "Set-Cookie": "__cf_bm=iv0IuSe3svd.3RGI26ULdnPPFSRAcX38TDAKaMGBdwo-1750585616-1.0.1.1-9yPe5v8MZB3P_i5RlvjuZZNZs5V4US5mLRlmWl.cMUM50wcAhegwvphVy2hSml3B2xY_YScqW_yQgNwQDlIR.U76R_jBvXN.NRGYIb47oouRlvM1jHr4egYqsOoyGsnH; path=/; expires=Sun, 22-Jun-25 10:16:56 GMT; domain=.sumup.net; HttpOnly; Secure; SameSite=None",
   "Server": "cloudflare",
-  "CF-RAY": "9536424abfb33356-EVN"
+  "CF-RAY": "953ad24588ff32de-EVN"
 } (custom_requests.py:44)
-2025-06-21 13:29:36 [DEBUG] Response Body:
- (custom_requests.py:54)
-2025-06-21 13:29:36 [INFO] Pushing updated users to VCS... (conftest.py:80)
+2025-06-22 02:46:56 [DEBUG] Response Body:
+{
+  "timestamp": "2025-06-22T09:46:56.591+00:00",
+  "status": 409,
+  "error": "Conflict",
+  "message": "Username already exists",
+  "path": "/api/auth/api/signup"
+} (custom_requests.py:54)
+2025-06-22 02:46:56 [INFO] Pushing updated users to VCS... (conftest.py:81)

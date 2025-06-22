@@ -28,6 +28,7 @@ def pytest_addoption(parser):
         help="Log sensitive information like passwords and tokens as '***' instead of their actual values"
     )
 
+
 @pytest.fixture(scope='session')
 def get_env(request):
     env = request.config.getoption("--env")

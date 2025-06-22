@@ -4,7 +4,7 @@ from http import HTTPStatus
 from api_clients_and_models.models.bank_account_model import BankAccountInfoResponseModel
 from api_clients_and_models.models.unauthorized_response_model import UnauthorizedResponseModel
 from tests.account_tests.conftest import get_registered_and_logged_in_user_with_bank_account
-from user_accounts_resources.invalid_data.invalid_bank_account_creation_info import invalid_bank_account_creation_info
+from test_data.invalid_data.invalid_bank_account_creation_info import invalid_bank_account_creation_info
 from utils.custom_asserts import validate_response_schema, assert_sent_information_equals_to_received_information, \
     validate_incorrect_response
 
@@ -41,17 +41,16 @@ def test_create_bank_account_for_existing_user(bank_account_api_client, get_regi
 
     response = bank_account_api_client.create_bank_account_request(user=user)
 
-    validate_response_schema(model=BankAccountInfoResponseModel, response=response, expected_status=HTTPStatus.OK)
-
-    bank_account_info = BankAccountInfoResponseModel.model_validate(response.json()).to_bank_account()
+    bank_account_info = validate_response_schema(model=BankAccountInfoResponseModel, response=response,
+                                                 expected_status=HTTPStatus.OK)
 
     assert_sent_information_equals_to_received_information(user.bank_account_creation_info.to_dict(),
-                                                           bank_account_info.to_dict(),
+                                                           bank_account_info.to_bank_account().to_dict(),
                                                            exclude_fields="initial_deposit")
 
     # TODO: Add initial deposit calculation logic to verify separately
 
-    user.bank_accounts[bank_account_info.id] = bank_account_info
+    user.bank_accounts[bank_account_info.id] = bank_account_info.to_bank_account()
     save_registered_user(user=user)
 
 

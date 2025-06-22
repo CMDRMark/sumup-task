@@ -8,146 +8,68 @@ This project provides a robust, extensible, and maintainable automation suite fo
 
 ## System Architecture
 
-Below is a UML-style class diagram (Mermaid) showing the relationships between API clients, core application models, and test-specific data models.
+Below you can find UML-style class diagrams (Mermaid) showing the relationships between API clients, core application models, and test-specific data models.
 
-```mermaid
-classDiagram
-    direction LR
-
-    class LoginData {
-        +username: str
-        +password: str
-    }
-
-    class SignupData {
-        +username: str
-        +password: str
-    }
-
-    class User {
-        +username: str
-        +password: str
-        +token: Optional~str~
-        +id: Optional~int~
-        +bank_accounts: dict of BankAccount
-        +bank_account_creation_info: BankAccountCreationInfoModel
-    }
-
-    class BankAccountModel {
-        +id: int
-        +first_name: str
-        +last_name: str
-        +full_name: str
-        +date_of_birth: str
-        +initial_deposit: float
-        +iban: Optional~str~
-    }
-
-    class BankAccountCreationInfoModel {
-        +first_name: str
-        +last_name: str
-        +date_of_birth: str
-        +initial_deposit: int
-    }
-
-    class BankAccountInfoResponseModel {
-        +id: int
-        +full_name: str
-        +iban: Optional~str~
-        +to_bank_account(): BankAccount
-    }
-
-    class BAMAPIClient {
-        +create_bank_account(user: User)
-        +get_bank_account_id(user: User, bank_account_id: str)
-    }
-
-    class AuthAPIClient {
-        +register_user_request(user: User)
-        +login_user_request(user: User)
-    }
-
-    class InvalidAccountScenario {
-        +first_name: str
-        +last_name: str
-        +date_of_birth: str
-        +initial_deposit: int
-        +expected_status_code: int
-        +expected_error: str
-    }
-
-    note for InvalidAccountScenario "Holds test data for invalid Bank account creation scenarios."
-
-    %% Relationships
-    BAMAPIClient ..> User : uses
-    BAMAPIClient:create_bank_account ..> BankAccountCreationInfoModel : uses
-    BAMAPIClient:get_bank_account_id ..> BankAccountInfoResponseModel : returns
-    BAMAPIClient ..> AuthAPIClient : depends on
-    
-    AuthAPIClient ..> User : uses
-    AuthAPIClient ..> LoginData : uses
-    AuthAPIClient ..> SignupData : uses
-    
-    User "1" *-- "1" BankAccountCreationInfoModel : holds
-    User "1" *-- "0..*" BankAccount : holds
-
-    BankAccountInfoResponseModel ..> BankAccount : creates
-
-%%    InvalidAccountScenario --o BankAccountCreationInfoModel : provides data
-```
-
-### How to read this diagram:
--   **Relationships:**
-    -   `*--` (Composition): A `User` is composed of its `BankAccount`s.
-    -   `..>` (Dependency/Uses): `BAMAPIClient` depends on `User` for making requests.
-    -   `--o` (Aggregation): `InvalidAccountScenario` is used to provide data for creating `BankAccountCreationInfoModel` in tests.
--   **Notes:** Provide extra context, such as the purpose of the `InvalidAccountScenario` class.
-
----
+[API clients and User relation.md](API%20clients%20and%20User%20relation.md)  
+[Test parametrization logic.md](Test%20parametrization%20logic.md)  
+[Full models relations.md](Full%20models%20relations.md)
 
 ## Setup & Execution
 
 ### Prerequisites
-- Python 3.10+
-- Pip (Python package installer)
+- Python 3.11+ or Docker
+
+## Local run
 
 ### Installation
-1.  **Clone the repository:**
-    ```bash
-    git clone <your-repo-url>
-    cd <repo-name>
-    ```
-2.  **Create and activate a virtual environment:**
+1. **Create and activate a virtual environment:**
     ```bash
     python -m venv venv
     source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
     ```
-3.  **Install dependencies:**
-    *(Assuming you have a `requirements.txt` file)*
+
+2. **Install dependencies:**
     ```bash
-    pip install pytest pydantic requests
+    pip install -r requirements.txt
     ```
 
 ### Running Tests
 -   **Run all tests:**
     ```bash
-    pytest
+    pytest .
     ```
--   **Run tests for a specific environment (e.g., TEST):**
+## Dockerized run 
+
+### Create an image
+1. **Build the Docker image:**
     ```bash
-    pytest --env=TEST
+    docker build -t sumup-bank-account-tests .
     ```
--   **Save newly created users to the data file:**
+2. **Run the Docker container:**
     ```bash
-    pytest --save-new-user
+    docker run --rm -v $(pwd):/app sumup-bank-account-tests
     ```
+### Report 
+By default, test suite generates an HTML report in the [output](output) directory. You can view it by opening [report.html](output/report.html) in your browser.
+
+#### Available pytest cli arguments:  
+-   `--env`: Specify the environment (e.g., `LOCAL`, `DEV`, `TEST`, `STAGING`, `PROD`).
+-   `--save-registered-users`: Save newly created users/bank accounts to [registered_users](test_data/registered_users) for the specified environment.
+-   `--hide-secrets`: Hide sensitive information in test reports (e.g., API keys, passwords).
 
 ## Configuration
-The test suite can be configured for different environments (e.g., `TEST`, `STAGING`). Environment-specific parameters like the base URL are managed via fixtures that are selected by the `--env` command-line flag.
+The test suite can be configured for different environments.
 
--   **Base URL:** Set in `tests/conftest.py`.
--   **API Key:** Handled automatically upon user login.
--   **Test Data:** Stored in `user_accounts_resources/` for each environment.
+- **Base URL:** Set in [conftest.py](conftest.py).
+- **Base URL mapping:** Defined in [url_mapping.py](api_clients_and_models/url_mapping.py) for each environment.
+- **Pytest configs:** Configured in [pytest.ini](pytest.ini) for test discovery, execution parameters and reporting. 
+
+## Test Data Management
+- **API Key:** Handled automatically upon user login.
+- **User Accounts:** Created during test execution or loaded from environment-specific files in [registered_users](test_data/registered_users).
+- **Test Data For Test Parametrization:** Stored in [invalid_data](test_data/invalid_data).
+
+
 
 ## Known Issues & TODOs
 -   **Bug:** The API returns a `411 Length Required` status code for some invalid account creation requests instead of a more appropriate `400 Bad Request`. This is noted in `test_create_bank_account_with_invalid_data`.

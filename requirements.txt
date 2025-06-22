@@ -1,0 +1,7 @@
+filelock
+matplotlib
+pydantic
+pytest
+pytest-html
+pytest-sugar
+requests

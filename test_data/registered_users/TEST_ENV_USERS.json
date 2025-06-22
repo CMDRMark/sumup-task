@@ -1,0 +1,148 @@
+{
+    "96": {
+        "username": "DLVEY",
+        "password": "ALVUV",
+        "token": "77ee0a85-7f9a-448e-aaeb-fff0dc5dc2a8",
+        "id": 96,
+        "bank_accounts": {
+            "34": {
+                "id": 34,
+                "first_name": "John",
+                "last_name": "Doe",
+                "full_name": "John Doe",
+                "date_of_birth": "1990-01-01",
+                "initial_deposit": 999.99,
+                "iban_issuance_status": "REQUESTED",
+                "created_at": "2025-06-20T20:48:55.115451971",
+                "updated_at": "2025-06-20T20:48:55.115451971",
+                "iban": null
+            },
+            "35": {
+                "id": 35,
+                "first_name": "John",
+                "last_name": "Doe",
+                "full_name": "John Doe",
+                "date_of_birth": "1990-01-01",
+                "initial_deposit": 999.99,
+                "iban_issuance_status": "REQUESTED",
+                "created_at": "2025-06-20T20:54:24.114096787",
+                "updated_at": "2025-06-20T20:54:24.114096787",
+                "iban": null
+            }
+        },
+        "bank_account_creation_info": {
+            "first_name": "John",
+            "last_name": "Doe",
+            "date_of_birth": "1990-01-01",
+            "initial_deposit": 1000
+        }
+    },
+    "116": {
+        "username": "U5CPY",
+        "password": "Y2XE5",
+        "token": "a25d4a21-ba3c-45cd-a200-4a1460295142",
+        "id": 116,
+        "bank_accounts": {},
+        "bank_account_creation_info": {}
+    },
+    "119": {
+        "username": "LNACQ",
+        "password": "L4SSD",
+        "token": "5f62cd1b-7492-4de7-bb2d-5efbb698cabf",
+        "id": 119,
+        "bank_accounts": {},
+        "bank_account_creation_info": {}
+    },
+    "120": {
+        "username": "2CY2K",
+        "password": "VS9FA",
+        "token": "a7ef4226-0d5c-411a-b4bc-486d9a347fbf",
+        "id": 120,
+        "bank_accounts": {
+            "92": {
+                "id": 92,
+                "first_name": "John",
+                "last_name": "Doe",
+                "full_name": "John Doe",
+                "date_of_birth": "1990-01-01",
+                "initial_deposit": 999.99,
+                "iban_issuance_status": "REQUESTED",
+                "created_at": "2025-06-21T16:10:21.066816128",
+                "updated_at": "2025-06-21T16:10:21.066816128",
+                "iban": null
+            }
+        },
+        "bank_account_creation_info": {
+            "first_name": "John",
+            "last_name": "Doe",
+            "date_of_birth": "1990-01-01",
+            "initial_deposit": 1000
+        }
+    },
+    "123": {
+        "username": "F6B0C",
+        "password": "5DV6J",
+        "token": "12e2db67-2bf4-4059-bdef-c68daf153d0f",
+        "id": 123,
+        "bank_accounts": {},
+        "bank_account_creation_info": {}
+    },
+    "124": {
+        "username": "YG65E",
+        "password": "3EHM1",
+        "token": "d929810b-86e4-440d-9a7b-9fab9496243e",
+        "id": 124,
+        "bank_accounts": {
+            "94": {
+                "id": 94,
+                "first_name": "John",
+                "last_name": "Doe",
+                "full_name": "John Doe",
+                "date_of_birth": "1990-01-01",
+                "initial_deposit": 999.99,
+                "iban_issuance_status": "REQUESTED",
+                "created_at": "2025-06-21T16:17:20.34903276",
+                "updated_at": "2025-06-21T16:17:20.34903276",
+                "iban": null
+            }
+        },
+        "bank_account_creation_info": {
+            "first_name": "John",
+            "last_name": "Doe",
+            "date_of_birth": "1990-01-01",
+            "initial_deposit": 1000
+        }
+    },
+    "126": {
+        "username": "OJW08",
+        "password": "BFV75",
+        "token": "c4eddb3d-cfcc-47d5-b14a-6679c5438669",
+        "id": 126,
+        "bank_accounts": {},
+        "bank_account_creation_info": {}
+    },
+    "128": {
+        "username": "Z9JZO",
+        "password": "R8Z6C",
+        "token": "2efb4add-ef7c-410a-984d-49207831a8fc",
+        "id": 128,
+        "bank_accounts": {},
+        "bank_account_creation_info": {}
+    },
+    "129": {
+        "username": "IOETQ",
+        "password": "EDTJI",
+        "token": "eae35ce6-40e0-4ced-a94b-88bc4a472520",
+        "id": 129,
+        "bank_accounts": {},
+        "bank_account_creation_info": {}
+    },
+    "130": {
+        "username": "HR5OM",
+        "password": "CX1M7",
+        "token": "a479befb-5fda-4a47-8055-7c94d3787c9b",
+        "id": 130,
+        "bank_accounts": {},
+        "bank_account_creation_info": {}
+    }
+}

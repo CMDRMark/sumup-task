@@ -41,15 +41,22 @@ class AuthAPIClient:
             user.id = resp.json()["id"]
         return resp
 
-    def login_user_request(self, user: User = None, username=None, password=None) -> Response:
-
-        username = username or user.username
-        password = password or user.password
+    def login_user_request(self, username=None, password=None) -> Response:
 
         resp = post_request(url=self.urls.login, headers=self.headers,
                             json={"username": username, "password": password}, verify=False)
 
+        return resp
+
+    def set_auth_token_to_user(self, user: User) -> None:
+        """
+        Sets the authentication token to the user object.
+        :param user: User object to set the token for.
+        """
+        resp = self.login_user_request(username=user.username, password=user.password)
+
         if resp.status_code == HTTPStatus.OK:
             user.token = resp.json()["api_key"]
-
-        return resp
+        else:
+            raise ValueError(f"Failed to log in user {user.username}. Status code: {resp.status_code}, "
+                             f"Response: {resp.text}")
