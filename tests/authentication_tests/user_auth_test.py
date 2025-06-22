@@ -9,16 +9,17 @@ from utils.custom_asserts import validate_response_schema, validate_incorrect_re
 @pytest.mark.prod_safe
 def test_correct_login(auth_client, get_random_existing_registered_user):
     user = get_random_existing_registered_user
-    response = auth_client.login_user_request(user=user)
+    response = auth_client.login_user_request(username=user.username, password=user.password)
 
     validate_response_schema(model=LoginResponseModel, response=response, expected_status=HTTPStatus.OK)
 
 
-def test_login_with_newly_created_user(auth_client, register_new_user):
+def test_login_with_newly_created_user(auth_client, register_new_user, save_registered_user):
     user = register_new_user
-    response = auth_client.login_user_request(user=user)
+    response = auth_client.login_user_request(username=user.username, password=user.password)
 
     validate_response_schema(model=LoginResponseModel, response=response, expected_status=HTTPStatus.OK)
+    save_registered_user(user)
 
 
 @pytest.mark.parametrize("test_params", invalid_login_data.values(), ids=invalid_login_data.keys())
