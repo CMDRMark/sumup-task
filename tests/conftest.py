@@ -116,9 +116,11 @@ def make_user():
                 password=password
             )
         if password and username:
-            logger.info(f"Using provided user. 'username: {user.username}, password: {user.password if os.getenv('HIDE_SECRETS') else '***'}")
+            logger.info(f"Using provided user. 'username: {user.username}, "
+                        f"password: {user.password if os.getenv('HIDE_SECRETS') else '***'}")
         else:
-            logger.info(f"Generated new user credentials. 'username: {user.username}, password: {user.password if os.getenv('HIDE_SECRETS') else '***'}")
+            logger.info(f"Generated new user credentials. 'username: {user.username}, "
+                        f"password: {user.password if os.getenv('HIDE_SECRETS') else '***'}")
         return user
     return _make_user
 
@@ -138,7 +140,9 @@ def register_new_user(auth_client, make_user) -> User:
     user = make_user()
     response = auth_client.register_user_request(user=user)
 
-    signup_response = validate_response_schema(model=RegistrationResponse, response=response, expected_status=HTTPStatus.OK)
+    signup_response = validate_response_schema(model=RegistrationResponse,
+                                               response=response,
+                                               expected_status=HTTPStatus.OK)
     assert signup_response.username == user.username
 
     return user

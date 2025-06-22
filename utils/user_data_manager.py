@@ -10,11 +10,30 @@ from utils.logger import logger
 
 
 def _get_file_path(env: str) -> Path:
+    """
+    Constructs the file path for the registered users JSON file based on the environment.
+
+    Args:
+        env (str): The environment name (e.g., "TEST", "PROD").
+
+    Returns:
+        Path: The file path for the registered users JSON file.
+    """
     return Path(__file__).parent.parent / "test_data" / "registered_users" / f"{env}_ENV_USERS.json"
 
 
-
 def load_users(env: str) -> dict:
+    """
+    Loads registered users from a JSON file for the specified environment.
+
+    If the file does not exist, it creates an empty file.
+
+    Args:
+        env (str): The environment name (e.g., "TEST", "PROD").
+
+    Returns:
+        dict: A dictionary of registered users.
+    """
     file_path = _get_file_path(env)
 
     if not file_path.exists():
@@ -31,6 +50,16 @@ def load_users(env: str) -> dict:
 
 
 def save_new_user(user: User, env: str):
+    """
+    Saves a new user to the registered users JSON file for the specified environment.
+
+    If the file does not exist, it creates an empty file. Handles file locking
+    to ensure thread-safe operations.
+
+    Args:
+        user (User): The user object to save.
+        env (str): The environment name (e.g., "TEST", "PROD").
+    """
     file_path = _get_file_path(env)
 
     lock = FileLock(str(file_path) + ".lock")
@@ -57,9 +86,21 @@ def save_new_user(user: User, env: str):
 
 def select_random_user(users: dict, must_have_bank_account: bool = False) -> User:
     """
-    Selects a random user from the given users.
-    Parses nested objects properly: bank_accounts and bank_account_creation_info.
-    Handles missing or empty cases gracefully.
+    Selects a random user from the given dictionary of users.
+
+    Filters users based on whether they have a bank account if specified.
+    Parses nested objects like bank accounts and bank account creation info.
+
+    Args:
+        users (dict): A dictionary of users.
+        must_have_bank_account (bool, optional): Whether to filter users to only those with bank accounts.
+        Defaults to False.
+
+    Returns:
+        User: A randomly selected user object.
+
+    Raises:
+        ValueError: If no users match the criteria.
     """
     if must_have_bank_account:
         users = {
@@ -93,4 +134,11 @@ def select_random_user(users: dict, must_have_bank_account: bool = False) -> Use
 
 
 def delete_user(user: User, env: str):
+    """
+    Deletes a user from the registered users JSON file for the specified environment.
+
+    Args:
+        user (User): The user object to delete.
+        env (str): The environment name (e.g., "TEST", "PROD").
+    """
     ...

@@ -20,15 +20,22 @@ def test_get_bank_account_info_without_auth_token(bank_account_api_client, get_r
     user = get_registered_user_with_bank_account
     bank_account_info = user.get_random_bank_account_info()
 
-    response = bank_account_api_client.get_bank_account_id_request(user=user, bank_account_id=str(bank_account_info.id))
-    validate_response_schema(model=UnauthorizedResponseModel, response=response, expected_status=HTTPStatus.UNAUTHORIZED)
+    response = bank_account_api_client.get_bank_account_id_request(user=user,
+                                                                   bank_account_id=str(bank_account_info.id))
+    validate_response_schema(model=UnauthorizedResponseModel,
+                             response=response,
+                             expected_status=HTTPStatus.UNAUTHORIZED)
 
 
-def test_get_bank_account_info_with_incorrect_auth_token(bank_account_api_client, get_registered_and_logged_in_user_with_bank_account):
+def test_get_bank_account_info_with_incorrect_auth_token(bank_account_api_client,
+                                                         get_registered_and_logged_in_user_with_bank_account):
     user = get_registered_and_logged_in_user_with_bank_account
     bank_account_id = user.get_random_bank_account_id()
 
     user.token += "_"
 
-    response = bank_account_api_client.get_bank_account_id_request(user=user, bank_account_id=str(bank_account_id))
-    validate_response_schema(model=UnauthorizedResponseModel, response=response, expected_status=HTTPStatus.UNAUTHORIZED)
+    response = bank_account_api_client.get_bank_account_id_request(user=user,
+                                                                   bank_account_id=str(bank_account_id))
+    validate_response_schema(model=UnauthorizedResponseModel,
+                             response=response,
+                             expected_status=HTTPStatus.UNAUTHORIZED)

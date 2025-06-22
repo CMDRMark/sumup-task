@@ -5,8 +5,9 @@ from api_clients_and_models.models.bank_account_model import BankAccountInfoResp
 from api_clients_and_models.models.unauthorized_response_model import UnauthorizedResponseModel
 from tests.account_tests.conftest import get_registered_and_logged_in_user_with_bank_account
 from test_data.invalid_data.invalid_bank_account_creation_info import invalid_bank_account_creation_info
-from utils.custom_asserts import validate_response_schema, assert_sent_information_equals_to_received_information, \
-    validate_incorrect_response
+from utils.custom_asserts import (validate_response_schema,
+                                  assert_sent_information_equals_to_received_information,
+                                  validate_incorrect_response)
 
 
 def test_create_bank_account_for_new_user(bank_account_api_client, get_new_registered_and_logged_in_user,
@@ -66,9 +67,6 @@ def test_create_bank_account_for_registered_user_with_invalid_data(test_params, 
     validate_incorrect_response(response,
                                 status=test_params.expected_status_code,
                                 message=test_params.expected_error_message)
-
-    # Generic test for incorrect bank account creation data, does not validate response schemas.
-    # Some specific errors available in API docs are included in the test data, the rest are generic assumptions.
 
 
 def test_create_bank_account_without_auth_token(bank_account_api_client,

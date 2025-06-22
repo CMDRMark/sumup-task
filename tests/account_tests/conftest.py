@@ -29,7 +29,10 @@ def set_bank_account_creation_info_to_user():
         Returns:
             User: The updated user object with bank account creation information set.
         """
-        info = BankAccountCreationInfoModel(first_name=first_name, last_name=last_name, initial_deposit=initial_deposit, date_of_birth=date_of_birth)
+        info = BankAccountCreationInfoModel(first_name=first_name,
+                                            last_name=last_name,
+                                            initial_deposit=initial_deposit,
+                                            date_of_birth=date_of_birth)
         user.bank_account_creation_info = info
         logger.info(f"Set bank account creation info for user: {user.username}, info: {info.to_dict()}")
         return user

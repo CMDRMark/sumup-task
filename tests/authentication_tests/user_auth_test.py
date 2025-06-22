@@ -34,7 +34,6 @@ def test_incorrect_login(make_user, auth_client, test_params):
 
 
 def test_login_with_incorrect_password(auth_client, get_random_existing_registered_user):
-    # Test fails since no response body is returned for this specific case.
 
     user = get_random_existing_registered_user
     response = auth_client.login_user_request(username=user.username, password=f"{user.password}123")

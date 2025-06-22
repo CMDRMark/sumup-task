@@ -56,8 +56,13 @@ class BAMAPIClient:
         self.urls = AccountEndpoints(base_url)
         self.headers: dict = {"Content-Type": "application/json"}
 
-    def create_bank_account_request(self, first_name: str = None, last_name: str = None, date_of_birth: str = None, initial_deposit: int = None,
-                                    token: str = None, user: User = None) -> Response:
+    def create_bank_account_request(self,
+                                    first_name: str = None,
+                                    last_name: str = None,
+                                    date_of_birth: str = None,
+                                    initial_deposit: int = None,
+                                    token: str = None,
+                                    user: User = None) -> Response:
         """
         Sends a request to create a new bank account.
 
@@ -84,12 +89,17 @@ class BAMAPIClient:
             "initial_deposit": initial_deposit or user.bank_account_creation_info.initial_deposit
         }
 
-        resp = post_request(url=self.urls.create_bank_account, headers=headers,
-                            json=payload, verify=False)
+        resp = post_request(url=self.urls.create_bank_account,
+                            headers=headers,
+                            json=payload,
+                            verify=False)
 
         return resp
 
-    def get_bank_account_id_request(self, user: User = None, bank_account_id: str = None, token: str = None) -> Response:
+    def get_bank_account_id_request(self,
+                                    user: User = None,
+                                    bank_account_id: str = None,
+                                    token: str = None) -> Response:
         """
         Sends a request to retrieve a bank account by its ID.
 
@@ -104,6 +114,7 @@ class BAMAPIClient:
         headers = self.headers.copy()
         headers["X-API-KEY"] = token or user.token
 
-        resp = get_request(url=self.urls.get_bank_account.replace("ID", bank_account_id), headers=self.headers,
+        resp = get_request(url=self.urls.get_bank_account.replace("ID", bank_account_id),
+                           headers=self.headers,
                            verify=False)
         return resp

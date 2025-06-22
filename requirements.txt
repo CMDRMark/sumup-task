@@ -1,9 +1,10 @@
-filelock
+filelock~=3.18.0
 matplotlib
-pydantic
-pytest
+pydantic~=2.11.7
+pytest~=8.4.1
 pytest-html
 pytest-sugar
-requests
+requests~=2.32.4
 pytest-xdist
 pytest-metadata
+urllib3~=2.5.0
