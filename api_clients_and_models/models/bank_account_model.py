@@ -1,7 +1,7 @@
 import datetime
 
 from pydantic import BaseModel, Field, field_validator, model_validator
-from typing import Optional
+from typing import Optional, Any
 
 
 class BankAccount(BaseModel):
@@ -69,10 +69,10 @@ class BankAccount(BaseModel):
 
 
 class BankAccountCreationInfoModel(BaseModel):
-    first_name: Optional[str] = Field(default=None)
-    last_name: Optional[str] = Field(default=None)
-    date_of_birth: Optional[str] = Field(default=None)
-    initial_deposit: Optional[int] = Field(default=None)
+    first_name: Any = Field(default=None)
+    last_name: Any = Field(default=None)
+    date_of_birth: Any = Field(default=None)
+    initial_deposit: Any = Field(default=None)
 
     def to_dict(self):
         return {
@@ -81,7 +81,6 @@ class BankAccountCreationInfoModel(BaseModel):
             "date_of_birth": self.date_of_birth,
             "initial_deposit": self.initial_deposit
         }
-
 
 
 class BankAccountInfoResponseModel(BaseModel):

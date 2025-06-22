@@ -25,8 +25,6 @@ def test_create_bank_account_for_new_user(bank_account_api_client, get_new_regis
                                                            bank_account_info.to_dict(),
                                                            exclude_fields="initial_deposit")
 
-    # TODO: Add initial deposit calculation logic to verify separately
-
     user.bank_accounts[bank_account_info.id] = bank_account_info
     save_registered_user(user=user)
 
@@ -47,8 +45,6 @@ def test_create_bank_account_for_existing_user(bank_account_api_client, get_regi
     assert_sent_information_equals_to_received_information(user.bank_account_creation_info.to_dict(),
                                                            bank_account_info.to_bank_account().to_dict(),
                                                            exclude_fields="initial_deposit")
-
-    # TODO: Add initial deposit calculation logic to verify separately
 
     user.bank_accounts[bank_account_info.id] = bank_account_info.to_bank_account()
     save_registered_user(user=user)
@@ -73,8 +69,6 @@ def test_create_bank_account_for_registered_user_with_invalid_data(test_params, 
 
     # Generic test for incorrect bank account creation data, does not validate response schemas.
     # Some specific errors available in API docs are included in the test data, the rest are generic assumptions.
-
-    # TODO: Incorrect status code returned 411 instead of 400 Bad Request
 
 
 def test_create_bank_account_without_auth_token(bank_account_api_client,

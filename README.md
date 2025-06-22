@@ -13,6 +13,28 @@ retrieving account details.
 
 Main test cases capture business logic of interaction of User with the API client.
 
+### Repository Structure
+
+- `api_clients_and_models/`: Contains API client implementations and core application models.
+- `test_data/`: Holds test data files, including registered users and invalid inputs for test parametrization.
+- `tests/`: Contains test cases that validate the functionality of the API clients and models. Also includes a `conftest.py` file with fixtures specific to this level of testing.
+- `tests/<service_folder>/`: Contains tests for a specific service or logical API unit. May include a local `conftest.py` for service-specific fixtures and hooks.
+- `output/`: Stores test reports and other output files generated during test execution.
+- `conftest.py`: Global configuration file for `pytest`, shared across all tests (located at the root of the project).
+- `requirements.txt`: Lists Python dependencies required to run the tests.
+- `pytest.ini`: Configuration file for `pytest`, defining test discovery rules, execution parameters, and reporting settings.
+- `README.md`: Provides an overview of the project, setup instructions, and guidelines for running tests.
+
+---
+
+Pytest automatically discovers `conftest.py` files in the directory tree, applying fixtures and hooks based on location:
+
+- The **root `conftest.py`** defines global fixtures shared across all tests.
+- The **`tests/conftest.py`** is scoped to the `tests/` directory and its subfolders.
+- Any **`conftest.py` inside a specific test folder** (e.g., `tests/service_x/conftest.py`) provides fixtures/hooks only to the tests within that folder.
+
+This structure allows clear fixture scoping and modular test configuration.
+
 ---
 
 ## System Architecture
@@ -70,24 +92,6 @@ models, and test-specific data models.
   ```bash
   pytest .
   ```
-
-## Dockerized run
-
-1. **Build the Docker image:**
-    ```bash
-    docker build -t sumup-bank-account-tests .
-    ```
-2. **Run the Docker container:**
-   ```bash
-    docker run --rm -v $(pwd):/app sumup-bank-account-tests --env=TEST --hide-secrets
-    ```
-   You can pass/replace pytest arguments as needed.
-
-### Report
-
-Regardless if you run the tests locally or inside a container, test suite generates an HTML report in
-the [output](output) directory. You can view it by opening [report.html](output/report.html) in your browser.
-
 #### Available pytest cli arguments:
 
 - `--env`: Specify the environment (e.g., `LOCAL`, `DEV`, `TEST`, `STAGING`, `PROD`). `TEST` by default.
@@ -95,11 +99,16 @@ the [output](output) directory. You can view it by opening [report.html](output/
   for the specified environment. False by default.
 - `--hide-secrets`: Hide sensitive information in test reports (e.g., API keys, passwords). False by default.
 
-#### Implemented pytest markers:
-
-- `@pytest.mark.prod_safe`: Marks tests that are safe to run in production environments. If --env=PROD is specified,
-  only these tests will be executed and all the secrets will be hidden in logs (logic is implemented
-  here [conftest.py](conftest.py))
+## Dockerized run
+- **Build the Docker image:**
+    ```bash
+    docker build -t sumup-bank-account-tests .
+    ```
+- **Run the Docker container:**
+   ```bash
+    docker run --rm -v $(pwd):/app sumup-bank-account-tests --env=TEST --hide-secrets
+    ```
+   You can pass/replace pytest arguments as needed.
 
 ## Configuration
 
@@ -108,6 +117,17 @@ As mentioned above, test run can be configured for different environments.
 - **Base URL:** Set in [conftest.py](conftest.py).
 - **Base URL mapping:** Defined in [url_mapping.py](api_clients_and_models/url_mapping.py) for each environment.
 - **Pytest configs:** Configured in [pytest.ini](pytest.ini) for test discovery, execution parameters and reporting.
+
+#### Implemented pytest markers:
+
+- `@pytest.mark.prod_safe`: Marks tests that are safe to run in production environments. If --env=PROD is specified,
+  only these tests will be executed and all the secrets will be hidden in logs (logic is implemented
+  here [conftest.py](conftest.py))
+
+## Report
+
+Regardless if you run the tests locally or inside a container, test suite generates an HTML report in
+the [output](output) directory. You can view it by opening [report.html](output/report.html) in your browser.
 
 ## Test Data Management
 
@@ -125,6 +145,9 @@ As mentioned above, test run can be configured for different environments.
   tools).
 - **Collect feedback from QA Engineers:** Gather insights from QA engineers to identify test framework improvements ideas.
 - **CI/CD Integration:** Integrate the test suite with CI/CD pipelines for automated testing on code changes.
+- **Implement proper user credentials management:** Use secure vaults or secret management tools to handle sensitive information like API keys and user credentials.
+- **Implement DB Validations**: Add database validations to ensure data integrity and consistency after API operations.
+- **Implement more complex test scenarios:** Create tests that simulate real-world user interactions and workflows (e2e tests).
 
-## Known Issues and TODOs
+## Known Issues
 ### Check the issues here: [Bugs and Issues.md](Bugs%20and%20Issues.md)

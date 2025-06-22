@@ -5,3 +5,5 @@ pytest
 pytest-html
 pytest-sugar
 requests
+pytest-xdist
+pytest-metadata

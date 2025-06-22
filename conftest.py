@@ -1,13 +1,18 @@
 import pytest
+from pytest_metadata.plugin import metadata_key
 
 from api_clients_and_models.url_mapping import BASE_URLS
 from utils.logger import logger
 import os
 
+# Set an environment variable to omit URLs in Pydantic error messages
 os.environ["PYDANTIC_ERRORS_OMIT_URL"] = "1"
 
 
 def pytest_addoption(parser):
+    """
+    Adds custom command-line options to pytest.
+    """
     parser.addoption(
         "--env",
         action="store",
@@ -31,6 +36,15 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope='session')
 def get_env(request):
+    """
+    A pytest fixture to retrieve the environment specified via the `--env` CLI option.
+
+    Args:
+        request: The pytest request object.
+
+    Returns:
+        str: The environment name (e.g., "TEST").
+    """
     env = request.config.getoption("--env")
     logger.info(f"Running tests in {env} environment")
     return env
@@ -38,11 +52,27 @@ def get_env(request):
 
 @pytest.fixture(scope='session')
 def get_base_url(get_env):
+    """
+    A pytest fixture to retrieve the base URL for the specified environment.
+
+    Args:
+        get_env: A fixture to retrieve the current environment.
+
+    Returns:
+        str: The base URL for the environment.
+    """
     return BASE_URLS[get_env]
 
 
 @pytest.fixture(scope='session', autouse=True)
 def configure_secrets_logging(request, get_env):
+    """
+    A pytest fixture to configure logging of sensitive information.
+
+    Args:
+        request: The pytest request object.
+        get_env: A fixture to retrieve the current environment.
+    """
     hide_secrets = request.config.getoption("--hide-secrets")
     if hide_secrets or get_env == "PROD":
         logger.info("Sensitive information will be logged as '***'")
@@ -53,10 +83,26 @@ def configure_secrets_logging(request, get_env):
 
 @pytest.fixture(scope='session')
 def save_registered_users_flag(request):
+    """
+    A pytest fixture to retrieve the `--save-registered-users` flag.
+
+    Args:
+        request: The pytest request object.
+
+    Returns:
+        bool: True if the flag is set, False otherwise.
+    """
     yield request.config.getoption("--save-registered-users")
 
 
 def pytest_collection_modifyitems(config, items):
+    """
+    Modifies the test collection based on the environment.
+
+    Args:
+        config: The pytest configuration object.
+        items: The list of collected test items.
+    """
     env = config.getoption("--env")
 
     if env == "PROD":
@@ -78,65 +124,24 @@ def pytest_collection_modifyitems(config, items):
 
 @pytest.fixture(scope="session", autouse=True)
 def push_updated_users_to_vcs():
+    """
+    A pytest fixture to push updated user data to version control after the test session.
+    """
     yield
     logger.info("Pushing updated users to VCS...")
 
 
-# TODO: Fix this
-# @pytest.fixture(scope="session", autouse=True)
-# def test_stats_collector():
-#     stats = {"total": 0, "passed": 0, "failed": 0}
-#     yield stats
-#
-#
-# def pytest_runtest_logreport(report):
-#     if report.when == "call":
-#         stats = pytest.session_stats  # Custom attribute
-#         stats["total"] += 1
-#         if report.passed:
-#             stats["passed"] += 1
-#         elif report.failed:
-#             stats["failed"] += 1
-#
-#
-# # Attach stats to pytest session object for global access
-# def pytest_sessionstart(session):
-#     session.stats = {"total": 0, "passed": 0, "failed": 0}
-#     pytest.session_stats = session.stats
-#
-#
-# def pytest_html_results_summary(prefix, summary, postfix):
-#     stats = pytest.session_stats
-#
-#     # Create donut chart
-#     fig, ax = plt.subplots()
-#     sizes = [stats["passed"], stats["failed"]]
-#     labels = ["Passed", "Failed"]
-#     colors = ["#4CAF50", "#F44336"]
-#
-#     wedges, texts, autotexts = ax.pie(
-#         sizes,
-#         labels=labels,
-#         colors=colors,
-#         autopct="%1.1f%%",
-#         startangle=90,
-#         pctdistance=0.85
-#     )
-#
-#     # Draw center circle for donut style
-#     centre_circle = plt.Circle((0, 0), 0.70, fc='white')
-#     fig.gca().add_artist(centre_circle)
-#
-#     ax.axis('equal')  # Equal aspect ratio ensures a circle.
-#     plt.tight_layout()
-#
-#     # Save to PNG base64
-#     buf = io.BytesIO()
-#     plt.savefig(buf, format="png")
-#     plt.close(fig)
-#     buf.seek(0)
-#     img_base64 = base64.b64encode(buf.read()).decode('utf-8')
-#     img_html = f'<img src="data:image/png;base64,{img_base64}" alt="Test Summary Chart" width="300"/>'
-#
-#     # Inject chart at top of HTML report
-#     prefix.extend([f"<h2>Test Summary</h2>{img_html}"])
+@pytest.hookimpl(tryfirst=True)
+def pytest_sessionfinish(session, exitstatus):
+    """
+    Hook to add custom values to pytest-metadata at the end of the test session.
+    """
+    config = session.config
+    env = config.getoption("--env")
+    save_users = config.getoption("--save-registered-users")
+    hide_secrets = config.getoption("--hide-secrets", "0")
+
+    if metadata_key in config.stash:
+        config.stash[metadata_key]["ENV"] = env
+        config.stash[metadata_key]["SAVE REGISTERED USERS"] = save_users
+        config.stash[metadata_key]["HIDE SECRETS"] = hide_secrets

@@ -34,7 +34,6 @@ class User(BaseModel):
         }
 
     def bank_account_creation_info_is_empty(self) -> bool:
-        """Returns True if all fields are None or empty."""
         return any(self.to_dict().values())
 
     def get_random_bank_account_id(self) -> Optional[int]:
