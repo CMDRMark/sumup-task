@@ -1,9 +1,8 @@
 ### Models used in the test framework
 ```mermaid
 classDiagram
-direction TB
-	namespace UserObject {
-        class User {
+direction LR
+	class User {
 	        str username
 	        str password
 	        str token
@@ -11,8 +10,6 @@ direction TB
 	        dict[id,BankAccount] bank_accounts
 	        BankAccountCreationInfoModel bank_account_creation_info
         }
-
-	}
 	namespace APIClients {
         class BAMAPIClient {
 	        -urls: AccountEndpoints
@@ -81,12 +78,13 @@ direction TB
 	    datetime expires_at
     }
 
-    User <-- BankAccount : stores inside
-    BankAccountCreationInfoModel --|> User : stores inside
-    BAMAPIClient -- BankAccountInfoResponseModel : returns
-    AuthAPIClient -- RegistrationResponse : returns
-    BAMAPIClient -- UnauthorizedResponseModel : can return
-    AuthAPIClient -- LoginResponseModel : returns
+    User <-- BankAccount : stored inside
+    BankAccountCreationInfoModel --|> User : stored inside
+    BAMAPIClient --> BankAccountInfoResponseModel : returns
+    AuthAPIClient --> RegistrationResponse : returns
+    BAMAPIClient --> UnauthorizedResponseModel : can return
+    AuthAPIClient --> LoginResponseModel : returns
     BankAccountCreationInfoModel --|> BAMAPIClient : used in request
     BankAccountInfoResponseModel --|> BankAccount : can be transformed into
+    User <-- AuthAPIClient : can set User.token value 
 ```

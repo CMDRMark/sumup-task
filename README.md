@@ -167,11 +167,11 @@ As I was testing the test suite on different machines I noticed, that users crea
 
 This might be the logic of test server, that's why some fixtures for getting registered users (with or without bank accounts) have a built-in logic to read the files and register new users on the fly.
 
-Initially that was not the case, but to ensure that the tests will work on any machine, the registered users files will be empty. 
+Initially that was not the case, but to ensure that the tests will work on any machine, the registered users files will be empty, and those users will be created during test execution. 
 
 That's why some fixtures might have a bit too complicated logic due to the limitation of test server. 
 
-Because of that some test data for invalid login/signup scenarios is stored in the [invalid_data](test_data/invalid_data) folder are not correct and need to be updated manually.
+Also, because of that some test data for invalid login/signup scenarios is stored in the [invalid_data](test_data/invalid_data) folder are not correct and need to be updated manually.
 
 ## Known Issues
 ### Check the issues here: [Bugs and Issues.md](Bugs%20and%20Issues.md)
