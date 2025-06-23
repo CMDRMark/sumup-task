@@ -149,6 +149,18 @@ the [output](output) directory. You can view it by opening [report.html](output/
 - **Implement DB Validations**: Add database validations to ensure data integrity and consistency after API operations.
 - **Implement more complex test scenarios:** Create tests that simulate real-world user interactions and workflows (e2e tests).
 
+## Approach to extending the test suite
+
+The main idea was to create a test suite that is easy to extend and maintain. This is achieved with a modular structure,
+where each component has a clear responsibility and can be easily modified or replaced.
+
+This is implemented by using API clients as objects that encapsulate the logic of interacting with the API, and core application models that represent the main entities in the system (e.g., User, BankAccount).
+Response models are used to validate the responses from the API and ensure that they match the expected structure.
+And test parametrization is done via simple data classes that define the expected input and output for each test case.
+
+In order to extend the test suite you can modify/add API clients, extend the Response models, extend the User class with more information related to the user, introduce more parametrization by adding new data to the test data files.
+
+
 
 ## Test task caveats 
 As I was testing the test suite on different machines I noticed, that users created on one machine, were not available, when tests were running on another machine. 
@@ -158,6 +170,8 @@ This might be the logic of test server, that's why some fixtures for getting reg
 Initially that was not the case, but to ensure that the tests will work on any machine, the registered users files will be empty. 
 
 That's why some fixtures might have a bit too complicated logic due to the limitation of test server. 
+
+Because of that some test data for invalid login/signup scenarios is stored in the [invalid_data](test_data/invalid_data) folder are not correct and need to be updated manually.
 
 ## Known Issues
 ### Check the issues here: [Bugs and Issues.md](Bugs%20and%20Issues.md)
