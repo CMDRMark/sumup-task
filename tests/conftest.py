@@ -43,9 +43,10 @@ def bank_account_api_client(get_base_url):
 
 
 @pytest.fixture(scope="function")
-def get_random_existing_registered_user(get_env) -> User:
+def get_random_existing_registered_user(get_env, register_new_user) -> User:
     """
     A pytest fixture to retrieve a random existing registered user.
+    If user file does not exist, it registers a new user, so that tests won't fail.
 
     Args:
         get_env: A fixture to retrieve the current environment.
@@ -54,7 +55,8 @@ def get_random_existing_registered_user(get_env) -> User:
         User: A randomly selected registered user object without requiring a bank account.
     """
     users = load_users(env=get_env)
-    user = select_random_user(users, must_have_bank_account=False)
+
+    user = register_new_user if not users else select_random_user(users, must_have_bank_account=False)
 
     logger.info(
         f"Using existing registered user. "

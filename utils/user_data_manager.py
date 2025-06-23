@@ -39,6 +39,9 @@ def load_users(env: str) -> dict:
     if not file_path.exists():
         logger.info(f"File {file_path} not found. Creating a new one.")
         file_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(file_path, "w") as f:
+            json.dump({}, f)
+            logger.info(f"File {file_path} created.")
 
     lock = FileLock(str(file_path) + ".lock")
 
