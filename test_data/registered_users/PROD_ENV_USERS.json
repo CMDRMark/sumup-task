@@ -1,18 +1,1 @@
-{
-    "201": {
-        "username": "YW7PK",
-        "password": "NB3HU",
-        "token": null,
-        "id": 201,
-        "bank_accounts": {},
-        "bank_account_creation_info": {}
-    },
-    "202": {
-        "username": "PU4EP",
-        "password": "MAH5Q",
-        "token": null,
-        "id": 202,
-        "bank_accounts": {},
-        "bank_account_creation_info": {}
-    }
-}
+{}

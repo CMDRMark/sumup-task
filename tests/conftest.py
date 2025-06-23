@@ -3,10 +3,16 @@ from http import HTTPStatus
 import pytest
 import os
 
-from api_clients_and_models.models.bank_account_model import BankAccountCreationInfoModel
+from api_clients_and_models.models.bank_account_model import (
+    BankAccountCreationInfoModel,
+    BankAccountInfoResponseModel,
+)
 from api_clients_and_models.models.signup_models import RegistrationResponse
 from api_clients_and_models.models.user_model import User
-from utils.custom_asserts import validate_response_schema
+from utils.custom_asserts import (
+    validate_response_schema,
+    assert_sent_information_equals_to_received_information,
+)
 from utils.signup_utils import get_random_username, get_random_password
 from utils.user_data_manager import load_users, save_new_user, select_random_user
 from utils.logger import logger
@@ -53,6 +59,8 @@ def get_random_existing_registered_user(get_env, register_new_user) -> User:
 
     Returns:
         User: A randomly selected registered user object without requiring a bank account.
+        :param get_env: fixture to retrieve the current environment.
+        :param register_new_user: fixture to register a new user if no users are found.
     """
     users = load_users(env=get_env)
 
@@ -67,17 +75,90 @@ def get_random_existing_registered_user(get_env, register_new_user) -> User:
 
 
 @pytest.fixture(scope="function")
-def get_registered_user_with_bank_account(get_env) -> User:
+def set_bank_account_creation_info_to_user():
+    """
+    A pytest fixture that sets bank account creation information for a user.
+
+    Returns:
+        function: A function that accepts a User object and optional bank account details
+                  (first_name, last_name, initial_deposit, date_of_birth) and updates the
+                  user's bank account creation information.
+    """
+    def _set_info(user: User, first_name=None, last_name=None, initial_deposit=None, date_of_birth=None):
+        """
+        Sets the bank account creation information for a user.
+
+        Args:
+            user (User): The user object to update.
+            first_name (str, optional): The first name of the account holder. Defaults to None.
+            last_name (str, optional): The last name of the account holder. Defaults to None.
+            initial_deposit (int, optional): The initial deposit amount. Defaults to None.
+            date_of_birth (str, optional): The date of birth of the account holder. Defaults to None.
+
+        Returns:
+            User: The updated user object with bank account creation information set.
+        """
+        info = BankAccountCreationInfoModel(first_name=first_name,
+                                            last_name=last_name,
+                                            initial_deposit=initial_deposit,
+                                            date_of_birth=date_of_birth)
+        user.bank_account_creation_info = info
+        logger.info(f"Set bank account creation info for user: {user.username}, info: {info.to_dict()}")
+        return user
+    return _set_info
+
+
+@pytest.fixture(scope="function")
+def get_registered_user_with_bank_account(auth_client, bank_account_api_client,
+                                          get_env, register_new_user,
+                                          set_bank_account_creation_info_to_user, save_registered_user) -> User:
     """
     A pytest fixture to retrieve a random registered user with at least one bank account.
 
+    If no registered users are found, it creates a new user, sets their bank account
+    creation information, registers the user, and creates a bank account for them.
+
     Args:
-        get_env: A fixture to retrieve the current environment.
+        auth_client (AuthAPIClient): The authentication client used to authenticate the user.
+        bank_account_api_client (BAMAPIClient): The bank account manager API client.
+        get_env (str): A fixture to retrieve the current environment.
+        register_new_user (User): A fixture to register a new user if no users are found.
+        set_bank_account_creation_info_to_user (function): A function to set bank account creation info for a user.
+        save_registered_user (function): A function to save the registered user.
 
     Returns:
         User: A randomly selected registered user object with a bank account.
     """
     users = load_users(env=get_env)
+    if not users:
+        logger.warning("No registered users found. Registering a new user.")
+        # If no users are found, register a new user
+
+        user = register_new_user
+        set_bank_account_creation_info_to_user(user,
+                                               first_name="John",
+                                               last_name="Doe",
+                                               initial_deposit=1000,
+                                               date_of_birth="1990-01-01")
+        auth_client.set_auth_token_to_user(user=user)
+        response = bank_account_api_client.create_bank_account_request(user=user)
+
+        bank_account_info = validate_response_schema(
+            model=BankAccountInfoResponseModel,
+            response=response,
+            expected_status=HTTPStatus.OK,
+        )
+
+        assert_sent_information_equals_to_received_information(
+            user.bank_account_creation_info.to_dict(),
+            bank_account_info.to_bank_account().to_dict(),
+            exclude_fields="initial_deposit",
+        )
+
+        user.bank_accounts[bank_account_info.id] = bank_account_info.to_bank_account()
+        save_registered_user(user=user)
+        return user
+
     return select_random_user(users, must_have_bank_account=True)
 
 

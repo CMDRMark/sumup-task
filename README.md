@@ -149,5 +149,15 @@ the [output](output) directory. You can view it by opening [report.html](output/
 - **Implement DB Validations**: Add database validations to ensure data integrity and consistency after API operations.
 - **Implement more complex test scenarios:** Create tests that simulate real-world user interactions and workflows (e2e tests).
 
+
+## Test task caveats 
+As I was testing the test suite on different machines I noticed, that users created on one machine, were not available, when tests were running on another machine. 
+
+This might be the logic of test server, that's why some fixtures for getting registered users (with or without bank accounts) have a built-in logic to read the files and register new users on the fly.
+
+Initially that was not the case, but to ensure that the tests will work on any machine, the registered users files will be empty. 
+
+That's why some fixtures might have a bit too complicated logic due to the limitation of test server. 
+
 ## Known Issues
 ### Check the issues here: [Bugs and Issues.md](Bugs%20and%20Issues.md)
