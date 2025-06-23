@@ -9,7 +9,7 @@ from utils.custom_asserts import (validate_response_schema,
                                   assert_sent_information_equals_to_received_information,
                                   validate_incorrect_response)
 
-
+@pytest.mark.prod_safe
 def test_create_bank_account_for_new_user(bank_account_api_client, get_new_registered_and_logged_in_user,
                                           set_bank_account_creation_info_to_user, save_registered_user):
     user = get_new_registered_and_logged_in_user
@@ -46,7 +46,7 @@ def test_create_bank_account_for_existing_user(bank_account_api_client, get_regi
     assert_sent_information_equals_to_received_information(user.bank_account_creation_info.to_dict(),
                                                            bank_account_info.to_bank_account().to_dict(),
                                                            exclude_fields="initial_deposit")
-
+# TODO: New user is created for each UUID
     user.bank_accounts[bank_account_info.id] = bank_account_info.to_bank_account()
     save_registered_user(user=user)
 
